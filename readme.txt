@@ -15,7 +15,7 @@ There is no warranty, either expressed or implied, covering the use or installat
 Pre-requisites
 ==============
 
-A running Moodle instance. This block has been tested against the Moodle v1.9.8-0 
+A running Moodle instance. This block has been tested against Moodle v1.9.8-0. It has not been tested against any other version.
 
 Our test environment was the Bitnami Moodle Stack (http://bitnami.org/stack/moodle) running on Amazon EC2.
 
