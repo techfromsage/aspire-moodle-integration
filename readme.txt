@@ -15,8 +15,26 @@ There is no warranty, either expressed or implied, covering the use or installat
 Pre-requisites
 ==============
 
-A running Moodle instance. This block has been tested against Moodle v1.9.8-0
+A running Moodle instance. This block has been tested against the Moodle v1.9.8-0 
 
+Our test environment was the Bitnami Moodle Stack (http://bitnami.org/stack/moodle) running on Amazon EC2.
 
 How to install:
 ===============
+
+1. ssh or telnet to your Moodle server
+2. change directory to your Moodle PHP application's root htdocs directory (on our server, this was /opt/bitnami/apps/moodle/htdocs/)
+3. Download the file http://aspire-moodle-integration.googlecode.com/files/aspire-moodle-integration.tar to this directory. On our installation (Linux), we did: 
+     sudo wget http://aspire-moodle-integration.googlecode.com/files/aspire-moodle-integration.tar
+4. Extract the archive. On our installation (Linux), we did:
+     sudo tar -xvf aspire-moodle-integration.tar 
+5. Log into Moodle as an administrator, and navigate to the Notifications screen (http://yourserver/moodle/admin/index.php). You should see a message telling you that the Aspire Lists block was successfully installed
+
+How to configure:
+=================
+
+1. From the admin area, choose "Modules", then "Blocks" and finally "Resource Lists"
+2. Type in the base url of your Aspire installation, e.g. "http://lists.broadminsteruniversity.org". Note this value must have no trailing slashes or page names - "http://lists.broadminsteruniversity.org/index.html" would be incorrect
+3. Choose your target knowledge grouping from Courses, Modules, Units or Programmes. The target knowledge grouping should be the lowest level knowledge grouping in your hierarchy, to which lists are normally attached.
+4. Click "Save Changes"
+
