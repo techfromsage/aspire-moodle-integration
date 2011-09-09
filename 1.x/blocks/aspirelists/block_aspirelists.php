@@ -39,7 +39,6 @@ class block_aspirelists extends block_base {
 		// get the code from the global course object, lowercasing it in the process
 		$code = strtolower($COURSE->idnumber);  
 		$url = "$site/$targetKG/$code/lists.json"; // build the target URL of the JSON data we'll be requesting from Aspire
-		
 		// using php curl, we'll now request the JSON data from Aspire
 		$ch = curl_init();
 		$options = array(

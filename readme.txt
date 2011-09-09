@@ -29,6 +29,10 @@ How to install:
 4. Extract the archive. On our installation (Linux), we did:
      sudo tar -xvf aspire-moodle-integration.tar 
 5. Log into Moodle as an administrator, and navigate to the Notifications screen (http://yourserver/moodle/admin/index.php). You should see a message telling you that the Aspire Lists block was successfully installed
+6. Now choose "Modules", then "Blocks" and finally "Sticky Blocks" from the admin area menu. 
+7. Choose "Course Page" as the page type to configure
+8. From the Blocks drop down on the right hand column, choose "Resource Lists". 
+9. The resource lists block will be placed on the page. Optionally, you can now position the block using the icons under the block title to move it about.
 
 How to configure:
 =================
