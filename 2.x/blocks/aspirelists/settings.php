@@ -15,6 +15,9 @@
     $settings->add(new admin_setting_configselect('aspirelists/targetKG', get_string('config_kg', 'block_aspirelists'),
                    get_string('config_kg_desc', 'block_aspirelists'), 'modules', $options));
 
+    $settings->add(new admin_setting_configtext('aspirelists/moduleCodeRegex',get_string('config_moduleCodeRegex', 'block_aspirelists'), get_string('config_moduleCodeRegex_desc', 'block_aspirelists'), get_string('config_moduleCodeRegex_ex', 'block_aspirelists') ));
 
-//    $settings->add(new admin_setting_configtext('aspirelists/targetKG',get_string('config_kg', 'block_aspirelists'),get_string('config_kg_desc', 'block_aspirelists'),get_string('config_kg_ex', 'block_aspirelists')));
-?>
+    $settings->add(new admin_setting_configtext('aspirelists/timePeriodRegex',get_string('config_timePeriodRegex', 'block_aspirelists'), get_string('config_timePeriodRegex_desc', 'block_aspirelists'), get_string('config_timePeriodRegex_ex', 'block_aspirelists') ));
+
+    $settings->add(new admin_setting_configtext('aspirelists/timePeriodMapping',get_string('config_timePeriodMapping', 'block_aspirelists'), get_string('config_timePeriodMapping_desc', 'block_aspirelists'), get_string('config_timePeriodMapping_ex', 'block_aspirelists') ));
+

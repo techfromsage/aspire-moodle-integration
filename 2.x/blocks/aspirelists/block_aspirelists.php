@@ -18,7 +18,7 @@ class block_aspirelists extends block_base {
 	$site = get_config('aspirelists', 'targetAspire'); // 1.x: $CFG->block_aspirelists_targetAspire;
 	if (empty($site))
 	{
-		$this->content->text = "Talis Aspire base URL not configured. Contact the system administrator.";
+		$this->content->text = get_string('no_base_url_configured', 'block_aspirelists');
 		return $this->content;
 	}
 
@@ -31,9 +31,55 @@ class block_aspirelists extends block_base {
     $this->content =  new stdClass;
 	if ($COURSE->idnumber)
 	{
-		// get the code from the global course object, lowercasing it in the process
-		$code = strtolower($COURSE->idnumber);  
-		$url = "$site/$targetKG/$code/lists.json"; // build the target URL of the JSON data we'll be requesting from Aspire
+		// get the code from the global course object
+		$codeGlobal = $COURSE->idnumber;
+
+        $moduleCodeRegEx = '/'.get_config('aspirelists', 'moduleCodeRegex').'/';
+        $timePeriodRegEx = '/'.get_config('aspirelists', 'timePeriodRegex').'/';
+
+        $urlModuleCode = '';
+        $urlTimePeriod = '';
+
+        // decide how to split up the moodle course id.
+        if($moduleCodeRegEx != '//')
+        {
+            $results = array();
+            if (preg_match($moduleCodeRegEx, $codeGlobal, $results) == 1) // we have a match
+            {
+                $urlModuleCode = strtolower($results[1]); // make sure is lowercase fr URL.
+            }
+            else
+            {
+                // we'll see if something matches anyway?
+                $urlModuleCode = strtolower($codeGlobal);
+            }
+        }
+        if( $timePeriodRegEx != '//')
+        {
+            $results = array();
+            if (preg_match($timePeriodRegEx, $codeGlobal, $results) == 1) // we have a match
+            {
+                $mapping = json_decode(get_config('aspirelists', 'timePeriodMapping'),true);
+                if($mapping != null)
+                {
+                    $urlTimePeriod = strtolower($mapping[$results[1]]); // make sure is lowercase for URL.
+                }
+                else
+                {
+                    // there is no mapping so just use the result
+                    $urlTimePeriod = strtolower($results[1]);
+                }
+            }
+        }
+
+        // build the target URL of the JSON data we'll be requesting from Aspire
+        if($urlTimePeriod != ''){
+            $url = "{$site}/{$targetKG}/{$urlModuleCode}/lists/{$urlTimePeriod}.json";
+        }
+        else
+        {
+            $url = "{$site}/{$targetKG}/{$urlModuleCode}/lists.json";
+        }
 		// using php curl, we'll now request the JSON data from Aspire
 		$ch = curl_init();
 		$options = array(
@@ -50,14 +96,14 @@ class block_aspirelists extends block_base {
 		if ($response) // if we get a valid response from curl...
 		{
 			$data = json_decode($response,true); // decode the returned JSON data
-			if(isset($data["$site/$targetKG/$code"]) && isset($data["$site/$targetKG/$code"]['http://purl.org/vocab/resourcelist/schema#usesList'])) // if there are any lists...
+			if(isset($data["$site/$targetKG/$urlModuleCode"]) && isset($data["$site/$targetKG/$urlModuleCode"]['http://purl.org/vocab/resourcelist/schema#usesList'])) // if there are any lists...
 			{
 				$lists = array();
-				foreach ($data["$site/$targetKG/$code"]['http://purl.org/vocab/resourcelist/schema#usesList'] as $usesList) // for each list this module uses...
+				foreach ($data["$site/$targetKG/$urlModuleCode"]['http://purl.org/vocab/resourcelist/schema#usesList'] as $usesList) // for each list this module uses...
 				{
 					$list = array();
-					$list["url"] = $usesList["value"]; // extract the list URL
-					$list["name"] = $data[$list["url"]]['http://rdfs.org/sioc/spec/name'][0]['value']; // extract the list name
+					$list["url"] = clean_param($usesList["value"], PARAM_URL); // extract the list URL
+					$list["name"] = clean_param($data[$list["url"]]['http://rdfs.org/sioc/spec/name'][0]['value'], PARAM_TEXT); // extract the list name
 
 					// let's try and get a last updated date
 					if (isset($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#lastUpdated'])) // if there is a last updated date...
@@ -67,7 +113,7 @@ class block_aspirelists extends block_base {
 
 						// ..and extract the date in a friendly, human readable format...
 						$list['lastUpdatedDate'] = date('l j F Y',
-						    strtotime($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#lastUpdated'][0]['value'])); 
+						    strtotime(clean_param($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#lastUpdated'][0]['value'], PARAM_TEXT)));
 					}
 
 					// now let's count the number of items
@@ -76,7 +122,7 @@ class block_aspirelists extends block_base {
 					{
 						foreach ($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#contains'] as $things) // loop through the list of things the list contains...
 						{
-							if (preg_match('/\/items\//',$things['value'])) // if the thing is an item, incrememt the item count (lists can contain sections, too)
+							if (preg_match('/\/items\//',clean_param($things['value'], PARAM_URL))) // if the thing is an item, increment the item count (lists can contain sections, too)
 							{
 								$itemCount++; 
 							}
@@ -85,28 +131,36 @@ class block_aspirelists extends block_base {
 					$list['count'] = $itemCount;
 					array_push($lists,$list);
 				}
-				usort($lists,'sortByName');
+				usort($lists,array($this,'sortByName'));
 				foreach ($lists as $list)
 				{
-					$itemNoun = ($list['count'] == 1) ? "item" : "items"; // get a friendly, human readable noun for the items
+					$itemNoun = ($list['count'] == 1) ? get_string("item", 'block_aspirelists') : get_string("items", 'block_aspirelists'); // get a friendly, human readable noun for the items
 
 					// finally, we're ready to output information to the browser
-					$output .= "<p><a href='".$list['url']."'>".$list['name']."</a>";
-					if ($list['count'] > 0) // add the item count if there are any...
-					{
-						$output .= " (".$list['count']." $itemNoun)";
-					}
-					if (isset($list["lastUpdatedDate"]))
-					{
-						$output .= ', last updated '.contextualTime(strtotime($list["lastUpdatedDate"])); 
-					}
-					$output .= "</p>\n";
+
+                    // item count display
+                    $itemCountHtml = '';
+                    if ($list['count'] > 0) // add the item count if there are any
+                    {
+                        $itemCountHtml = html_writer::tag('span', " ({$list['count']} {$itemNoun})" ,array('class'=>'aspirelists-item-count'));
+                    }
+
+                    // last update display
+                    $lastUpdatedHtml = '';
+                    if (isset($list["lastUpdatedDate"]))
+                    {
+                        $lastUpdatedHtml = html_writer::tag('span',', '.get_string('lastUpdated','block_aspirelists').' '.$this->contextualTime(strtotime($list["lastUpdatedDate"])) , array('class'=>'aspirelists-last-updated'));
+                    }
+
+                    // put it all together
+                    $output .= html_writer::tag('p',
+                        html_writer::tag('a', $list['name'] , array('href' => $list['url'])) . $itemCountHtml . $lastUpdatedHtml );
 				}
 			}
 		}
 		if ($output=='')
 		{
-		    $this->content->text   = '<p>'.get_string('no_resource_lists_msg', 'block_aspirelists')." $COURSE->fullname.</p>";
+		    $this->content->text   = html_writer::tag('p', get_string('no_resource_lists_msg', 'block_aspirelists'). " " . format_string($COURSE->fullname));
 		}
 		else
 		{
@@ -122,37 +176,37 @@ class block_aspirelists extends block_base {
   }
 
   function applicable_formats() {
-    return array('course-view' => true);
+    return array(
+        'course-view' => true,
+        'site' => true
+    );
   }
 
+  function contextualTime($small_ts, $large_ts=false) {
+      if(!$large_ts) $large_ts = time();
+      $n = $large_ts - $small_ts;
+      if($n <= 1) return 'less than 1 second ago';
+      if($n < (60)) return $n . ' seconds ago';
+      if($n < (60*60)) { $minutes = round($n/60); return 'about ' . $minutes . ' minute' . ($minutes > 1 ? 's' : '') . ' ago'; }
+      if($n < (60*60*16)) { $hours = round($n/(60*60)); return 'about ' . $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago'; }
+      if($n < (time() - strtotime('yesterday'))) return 'yesterday';
+      if($n < (60*60*24)) { $hours = round($n/(60*60)); return 'about ' . $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago'; }
+      if($n < (60*60*24*6.5)) return 'about ' . round($n/(60*60*24)) . ' days ago';
+      if($n < (time() - strtotime('last week'))) return 'last week';
+      if(round($n/(60*60*24*7))  == 1) return 'about a week ago';
+      if($n < (60*60*24*7*3.5)) return 'about ' . round($n/(60*60*24*7)) . ' weeks ago';
+      if($n < (time() - strtotime('last month'))) return 'last month';
+      if(round($n/(60*60*24*7*4))  == 1) return 'about a month ago';
+      if($n < (60*60*24*7*4*11.5)) return 'about ' . round($n/(60*60*24*7*4)) . ' months ago';
+      if($n < (time() - strtotime('last year'))) return 'last year';
+      if(round($n/(60*60*24*7*52)) == 1) return 'about a year ago';
+      if($n >= (60*60*24*7*4*12)) return 'about ' . round($n/(60*60*24*7*52)) . ' years ago';
+      return false;
+  }
 
+  function sortByName($a,$b)
+  {
+        return strcmp($a["name"], $b["name"]);
+  }
 
 }
-
-function contextualTime($small_ts, $large_ts=false) {
-  if(!$large_ts) $large_ts = time();
-  $n = $large_ts - $small_ts;
-  if($n <= 1) return 'less than 1 second ago';
-  if($n < (60)) return $n . ' seconds ago';
-  if($n < (60*60)) { $minutes = round($n/60); return 'about ' . $minutes . ' minute' . ($minutes > 1 ? 's' : '') . ' ago'; }
-  if($n < (60*60*16)) { $hours = round($n/(60*60)); return 'about ' . $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago'; }
-  if($n < (time() - strtotime('yesterday'))) return 'yesterday';
-  if($n < (60*60*24)) { $hours = round($n/(60*60)); return 'about ' . $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago'; }
-  if($n < (60*60*24*6.5)) return 'about ' . round($n/(60*60*24)) . ' days ago';
-  if($n < (time() - strtotime('last week'))) return 'last week';
-  if(round($n/(60*60*24*7))  == 1) return 'about a week ago';
-  if($n < (60*60*24*7*3.5)) return 'about ' . round($n/(60*60*24*7)) . ' weeks ago';
-  if($n < (time() - strtotime('last month'))) return 'last month';
-  if(round($n/(60*60*24*7*4))  == 1) return 'about a month ago';
-  if($n < (60*60*24*7*4*11.5)) return 'about ' . round($n/(60*60*24*7*4)) . ' months ago';
-  if($n < (time() - strtotime('last year'))) return 'last year';
-  if(round($n/(60*60*24*7*52)) == 1) return 'about a year ago';
-  if($n >= (60*60*24*7*4*12)) return 'about ' . round($n/(60*60*24*7*52)) . ' years ago'; 
-  return false;
-}
-
-function sortByName($a,$b)
-{
-    return strcmp($a["name"], $b["name"]);
-}
-?>

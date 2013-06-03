@@ -1,8 +1,29 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: txh
- * Date: 03/06/2013
- * Time: 11:42
- * To change this template use File | Settings | File Templates.
- */
+
+defined('MOODLE_INTERNAL') || die();
+
+$capabilities = array(
+
+    'block/aspirelists:myaddinstance' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'user' => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'moodle/my:manageblocks'
+    ),
+
+    'block/aspirelists:addinstance' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ),
+);
