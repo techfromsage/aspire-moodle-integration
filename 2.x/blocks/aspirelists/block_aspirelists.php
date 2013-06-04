@@ -154,7 +154,7 @@ class block_aspirelists extends block_base {
 
                     // put it all together
                     $output .= html_writer::tag('p',
-                        html_writer::tag('a', $list['name'] , array('href' => $list['url'])) . $itemCountHtml . $lastUpdatedHtml );
+                        html_writer::tag('a', $list['name'] , array('href' => $list['url'])) . html_writer::empty_tag('br') . $itemCountHtml . $lastUpdatedHtml );
 				}
 			}
 		}
