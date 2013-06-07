@@ -1,5 +1,5 @@
 <?php
-// Copyright (c) Talis Education Limited, 2011
+// Copyright (c) Talis Education Limited, 2013
 // Released under the LGPL Licence - http://www.gnu.org/licenses/lgpl.html. Anyone is free to change or redistribute this code.
 
 class block_aspirelists extends block_base {
