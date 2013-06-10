@@ -20,15 +20,25 @@ Our test environment was the Bitnami Moodle Stack (http://bitnami.org/stack/mood
 The commands shown here are those used on a unix based system, they also contain specifics for our bitnami based moodle instance on which we were testing, but the principle of each step can be applied to other systems.
 
 1. ssh or telnet to your Moodle server
+
     ssh bitnami@bitnamiserver.local
+
 2. change directory to your Moodle PHP application's root htdocs directory:
+
     cd /opt/bitnami/apps/moodle/htdocs/
+
 3. Download the file aspire-moodle-integration.tar to this directory:
+
     wget https://github.com/talis/aspire-moodle-integration/raw/master/2.4/aspire-moodle2.4-integration.tar
+
 4. Extract the archive:
+
     tar -xvf aspire-moodle-integration.tar 
+
 5. Log into Moodle as an administrator, and navigate to the Notifications screen
+
     http://yourserver/moodle/admin/index.php
+
 6. You should see a message telling you that the Talis Aspire Resource Lists block needs your attention. Clicking 'Upgrade Moodle database now' will finish off the installation of this block.
 
 ## How to configure
