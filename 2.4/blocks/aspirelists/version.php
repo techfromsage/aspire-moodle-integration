@@ -4,6 +4,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 201306031713;  // YYYYMMDDHH (year, month, day, 24-hr time)
+$plugin->version = 201306201525;  // YYYYMMDDHH (year, month, day, 24-hr time)
 $plugin->requires = 2012120300; // YYYYMMDDHH (This is the release version for Moodle 2.4)
 $plugin->component = 'block_aspirelists';

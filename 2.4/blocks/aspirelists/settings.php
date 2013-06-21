@@ -21,3 +21,8 @@
 
     $settings->add(new admin_setting_configtext('aspirelists/timePeriodMapping',get_string('config_timePeriodMapping', 'block_aspirelists'), get_string('config_timePeriodMapping_desc', 'block_aspirelists'), get_string('config_timePeriodMapping_ex', 'block_aspirelists') ));
 
+    $settings->add(new admin_setting_configcheckbox('aspirelists/openNewWindow', get_string('config_openNewWindow', 'block_aspirelists'), get_string('config_openNewWindow_desc', 'block_aspirelists'), 0));
+
+    $settings->add(new admin_setting_configtext('aspirelists/blockTitle',get_string('config_AspireBlockTitle', 'block_aspirelists'),get_string('config_AspireBlockTitle_desc', 'block_aspirelists'), get_string('aspirelists', 'block_aspirelists') ));
+
+    $settings->add(new admin_setting_configtext('aspirelists/noResourceListsMessage',get_string('config_noResourceListsMessage', 'block_aspirelists'),get_string('config_noResourceListsMessage_desc', 'block_aspirelists'), get_string('no_resource_lists_msg', 'block_aspirelists') ));

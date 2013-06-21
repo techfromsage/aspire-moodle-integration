@@ -4,7 +4,7 @@
 
 class block_aspirelists extends block_base {
   function init() {
-    $this->title   = get_string('aspirelists', 'block_aspirelists');
+    $this->title   = get_config('aspirelists', 'blockTitle');
   }
 
   function get_content() {
@@ -15,18 +15,24 @@ class block_aspirelists extends block_base {
       return $this->content;
     }
 
-	$site = get_config('aspirelists', 'targetAspire'); // 1.x: $CFG->block_aspirelists_targetAspire;
+	$site = get_config('aspirelists', 'targetAspire');
 	if (empty($site))
 	{
 		$this->content->text = get_string('no_base_url_configured', 'block_aspirelists');
 		return $this->content;
 	}
 
-	$targetKG = get_config('aspirelists', 'targetKG');// 1.x: $CFG->block_aspirelists_targetKG;
+	$targetKG = get_config('aspirelists', 'targetKG');
 	if (empty($targetKG))
 	{
 		$targetKG = "modules"; // default to modules
 	}
+
+    $hrefTarget = get_config('aspirelists', 'openNewWindow');
+    $target ='_self';
+    if($hrefTarget == 1){
+        $target = '_blank';
+    }
 
     $this->content =  new stdClass;
 	if ($COURSE->idnumber)
@@ -154,13 +160,13 @@ class block_aspirelists extends block_base {
 
                     // put it all together
                     $output .= html_writer::tag('p',
-                        html_writer::tag('a', $list['name'] , array('href' => $list['url'])) . html_writer::empty_tag('br') . $itemCountHtml . $lastUpdatedHtml );
+                        html_writer::tag('a', $list['name'] , array('href' => $list['url'], 'target' => $target)) . html_writer::empty_tag('br') . $itemCountHtml . $lastUpdatedHtml );
 				}
 			}
 		}
 		if ($output=='')
 		{
-		    $this->content->text   = html_writer::tag('p', get_string('no_resource_lists_msg', 'block_aspirelists'). " " . format_string($COURSE->fullname));
+		    $this->content->text   = html_writer::tag('p', get_config('aspirelists', 'noResourceListsMessage'));
 		}
 		else
 		{
