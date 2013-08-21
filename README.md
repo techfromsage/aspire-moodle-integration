@@ -2,6 +2,15 @@
 
 This software provides a "block" for Moodle that can be added to the course page in Moodle. The block will display available reading lists in Talis Aspire for that course.
 
+## Benefits
+
+  * Easy integration of Talis Aspire reading lists into your Moodle installation
+  * Reading lists become more visible to your students
+  * Increase usage of reading lists in Talis Aspire
+  * Optionally view only lists related to the time period of the currently displayed Moodle course page.
+  * Customisation of wording displayed to students
+  * Supports multiple languages
+
 ## License
 
 Copyright (c) Talis Education Limited, 2013
