@@ -58,6 +58,10 @@ The block needs to be configured to point to your Talis Aspire tenancy
 7. Now setup the block:
   7. choose _Site Administration >> Plugins >> Blocks >> Talis Aspire Resource Lists_ 
   7. Configure the plugin for your local installation
+    * You will need the following for a basic installation:
+      * Your Talis Aspire Base URL: e.g. http://readinglists.institution.ac.uk
+      * To know whether your lists are attached to `modules`, `courses`, `units`, etc...
+      * A couple of regular expressions to choose the bits of your Moodle CourseID that Talis Aspire is interested in.  The first regular expression should allow a match to module codes in Talis Aspire. The second regular expression is used to match to time period slugs in Talis Aspire.  If you need help with these, please [raise a ticket](http://support.talisaspire.com) with some example Moodle codes, and we'll give you a hand.
 
 ## Making it live
 
