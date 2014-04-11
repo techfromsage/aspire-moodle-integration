@@ -59,3 +59,5 @@ $string['course_code_field'] = 'Module code field';
 $string['course_code_field_desc'] = 'The Moodle Course Field that corresponds to the Aspire module code';
 
 $string['save_and_continue'] = "Link to resource list or section";
+
+$string['icon_url'] = "http://b65a3c5a45eb7c0136ca-3a802cea7cd9c7fa6dc4f29b6a88c582.r90.cf3.rackcdn.com/2014-02-17-10-13-16/block_29240.png";
