@@ -76,3 +76,5 @@ $string['showexpanded'] = 'Show list sections expanded';
 $string['showexpanded_help'] = 'If set to \'yes\', list sections are shown expanded by default; otherwise they are shown collapsed.';
 $string['displayheader'] = 'Display';
 $string['generalheader'] = 'General';
+$string['accordion_closed'] = '&#9664;';
+$string['accordion_open'] = '&#9660;';

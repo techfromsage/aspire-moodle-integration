@@ -66,8 +66,7 @@ if ($l) {  // Two ways to specify the module
     $list = $DB->get_record('aspirelists', array('id' => $cm->instance), '*', MUST_EXIST);
 }
 
-
-//$lti = $DB->get_record('lti', array('id' => $list->lti));
+// Turn our aspirelist object more into something that the lti module is expecting
 aspirelists_add_lti_properties($list);
 
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);

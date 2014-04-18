@@ -64,30 +64,25 @@ function aspirelists_supports($feature) {
  * @return int The id of the newly inserted aspirelists record
  */
 function aspirelists_add_instance(stdClass $aspirelists, mod_aspirelists_mod_form $mform = null) {
-     error_log("we are in aspirelists_add_instance");
     global $DB, $CFG;
-//    require_once ($CFG->dirroot.'/mod/lti/lib.php');
-//    require_once ($CFG->dirroot.'/mod/lti/locallib.php');
-    $aspirelists->timecreated = time();
-    $aspirelists->timemodified = $aspirelists->timecreated;
-    $aspirelists->servicesalt = uniqid('', true);
+    $aspirelists->id = $DB->insert_record('aspirelists', $aspirelists);
+    return $aspirelists->id;
+}
 
-    if (!isset($aspirelists->grade)) {
-        $aspirelists->grade = 100; // TODO: Why is this harcoded here and default @ DB
-    }
-    $list = new stdClass();
+/**
+ * Given an object containing all the necessary data,
+ * (defined by the form in mod.html) this function
+ * will update an existing instance with new data.
+ *
+ * @param object $instance An object from the form in mod.html
+ * @return boolean Success/Fail
+ **/
+function aspirelists_update_instance($aspirelists, $mform) {
+    global $DB, $CFG;
 
-//    $list->lti = $DB->insert_record('lti', $aspirelists);
-
-
-//    $aspirelists->id = $DB->insert_record('aspirelists', $aspirelists);
-    $list->course = $aspirelists->course;
-    $list->name = $aspirelists->name;
-    $list->display = $aspirelists->display;
-    $list->showexpanded = $aspirelists->showexpanded;
-    $list->timemodified = $aspirelists->timecreated;
-    $list->id = $DB->insert_record('aspirelists', $list);
-    return $list->id;
+    $aspirelists->timemodified = time();
+    $aspirelists->id = $aspirelists->instance;
+    return $DB->update_record('aspirelists', $aspirelists);
 }
 
 /**
@@ -170,7 +165,7 @@ function aspirelists_add_lti_properties(&$aspirelist)
     $aspirelist->instructorchoicesendname = false;
     $aspirelist->instructorchoicesendemailaddr = false;
     $aspirelist->launchcontainer = LTI_LAUNCH_CONTAINER_EMBED;
-    $aspirelist->servicesalt = "";
+    $aspirelist->servicesalt = uniqid('', true);
     $course = get_course($aspirelist->course);
     $customLTIParams = array('launch_identifier='.uniqid());
     $baseKGCode = $course->{$pluginSettings->courseCodeField};
@@ -211,7 +206,7 @@ function aspirelists_add_lti_properties(&$aspirelist)
  * @param cm_info $cm
  */
 function aspirelists_cm_info_view(cm_info $cm) {
-    global $PAGE;
+    global $CFG,$PAGE;
     if ($cm->uservisible && $cm->get_custom_data()) {
         // Restore folder object from customdata.
         // Note the field 'customdata' is not empty IF AND ONLY IF we display contens inline.
@@ -228,10 +223,9 @@ function aspirelists_cm_info_view(cm_info $cm) {
         if (empty($aspirelist->introformat)) {
             $aspirelist->introformat = FORMAT_MOODLE;
         }
-        // display folder
+        $aspirelist->showdescription = $cm->showdescription;
+        // display reading list
         $renderer = $PAGE->get_renderer('mod_aspirelists');
-        $PAGE->requires->js_init_call('M.mod_aspirelists.show', array());
-        $PAGE->requires->js_init_call('M.mod_aspirelists.hide', array());
         $cm->set_content($renderer->display_aspirelists($aspirelist));
     }
 }
@@ -246,10 +240,20 @@ function aspirelists_cm_info_view(cm_info $cm) {
  * @param cm_info $cm
  */
 function aspirelists_cm_info_dynamic(cm_info $cm) {
-    error_log('cm_info_dynamic');
+    global $CFG;
     if ($cm->get_custom_data()) {
         // the field 'customdata' is not empty IF AND ONLY IF we display contens inline
-//        $cm->set_no_view_link();
+        require_once($CFG->dirroot . '/mod/aspirelists/load_js.php');
+        $cm->set_extra_classes('aspirelists_inline_readings_toggle');
+        $aspirelist = $cm->get_custom_data();
+        if(isset($aspirelist->showexpanded) && $aspirelist->showexpanded === '1')
+        {
+            $afterLink = get_string('accordion_open', 'aspirelists');
+        } else {
+            $afterLink = get_string('accordion_closed', 'aspirelists');
+        }
+
+        $cm->set_after_link("<span class=\"aspirelists_inline_accordion\">" . $afterLink . "</span>");
     }
 }
 
@@ -273,13 +277,13 @@ function aspirelists_get_coursemodule_info($cm) {
     $cminfo = new cached_cm_info();
     $cminfo->name = $list->name;
     if ($list->display == ASPIRELISTS_DISPLAY_INLINE) {
-        // prepare folder object to store in customdata
+        // prepare list object to store in customdata
         $ldata = new stdClass();
         $ldata->showexpanded = $list->showexpanded;
         if ($cm->showdescription && strlen(trim($list->intro))) {
             $ldata->intro = $list->intro;
             if ($list->introformat != FORMAT_MOODLE) {
-                $fdata->introformat = $list->introformat;
+                $ldata->introformat = $list->introformat;
             }
         }
         $cminfo->customdata = $ldata;

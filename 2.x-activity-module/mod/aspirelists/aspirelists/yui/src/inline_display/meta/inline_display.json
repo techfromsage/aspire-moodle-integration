@@ -1,0 +1,10 @@
+{
+    "moodle-mod_aspirelists-inline_display": {
+        "requires": [
+            "base",
+            "node",
+            "event",
+            "event-delegate"
+        ]
+    }
+}
