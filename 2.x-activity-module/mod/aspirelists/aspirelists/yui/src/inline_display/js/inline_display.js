@@ -21,7 +21,7 @@ NS.toggle_inline_list = function(e)
     var courseSection = e.target.ancestor('.aspirelists');
     if(courseSection)
     {
-        courseSection.all('.aspirelists_inline_readings_container').each(function(n)
+        courseSection.all('.aspirelists_inline_list').each(function(n)
         {
             if(n.getStyle('display') === 'none')
             {
@@ -38,6 +38,22 @@ NS.toggle_inline_list = function(e)
 NS.resize_embedded_lists = function(e)
 {
     Y.all('.aspirelists_inline_list').each(function(o){
-        o.setAttribute('width', o.ancestor('.aspirelists').getComputedStyle("width"));
+        var width = o.ancestor('.aspirelists').get("offsetWidth");
+
+        var margin = o.ancestor('.aspirelists').getComputedStyle("margin");
+        var padding = o.ancestor('.aspirelists').getComputedStyle("padding-left");
+        if(margin) { width = width - (parseFloat(margin, 10) * 2);}
+        if(padding) { width = width - (parseFloat(padding, 10) * 2);}
+
+        var indent = o.ancestor('.mod-indent-outer');
+        if(indent)
+        {
+            var iPadding = indent.getComputedStyle("padding-left");
+            var iMargin = o.getComputedStyle("margin-left");
+            if(iMargin) { width = width - (parseFloat(iMargin, 10) * 2);}
+            if(iPadding) { width = width - (parseFloat(iPadding, 10) * 2);}
+        }
+
+        o.setAttribute('width', width);
     });
 }

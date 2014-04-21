@@ -78,3 +78,7 @@ $string['displayheader'] = 'Display';
 $string['generalheader'] = 'General';
 $string['accordion_closed'] = '&#9664;';
 $string['accordion_open'] = '&#9660;';
+
+$string['config_defaultInlineListHeight'] = 'Default height of an embedded list';
+$string['config_defaultInlineListHeight_desc'] = 'The default height of an inline embedded list in the course view';
+$string['config_defaultInlineListHeight_default'] = '400px' ;
