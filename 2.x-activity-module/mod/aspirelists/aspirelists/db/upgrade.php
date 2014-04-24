@@ -83,4 +83,28 @@ function xmldb_aspirelists_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2014041705, 'aspirelists');
     }
 
+    if ($oldversion < 2014042301) {
+
+        // Define table aspirelists to be created.
+        $table = new xmldb_table('aspirelists');
+
+        // Remove/alter fields
+        $field = new xmldb_field('lti', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Drop LTI field, since we don't use the LTI table anymore
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        $field = new xmldb_field('showexpanded', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+        // This should default to collapsed
+        if ($dbman->field_exists($table, $field)) {
+            $field->setDefault('0');
+            $dbman->change_field_default($table, $field);
+        }
+
+        // Aspirelists savepoint reached.
+        upgrade_mod_savepoint(true, 2014042301, 'aspirelists');
+    }
+
 }
