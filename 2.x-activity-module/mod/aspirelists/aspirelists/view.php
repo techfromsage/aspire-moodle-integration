@@ -14,48 +14,33 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 //
-// This file is part of BasicLTI4Moodle
-//
-// BasicLTI4Moodle is an IMS BasicLTI (Basic Learning Tools for Interoperability)
-// consumer for Moodle 1.9 and Moodle 2.0. BasicLTI is a IMS Standard that allows web
-// based learning tools to be easily integrated in LMS as native ones. The IMS BasicLTI
-// specification is part of the IMS standard Common Cartridge 1.1 Sakai and other main LMS
-// are already supporting or going to support BasicLTI. This project Implements the consumer
-// for Moodle. Moodle is a Free Open source Learning Management System by Martin Dougiamas.
-// BasicLTI4Moodle is a project iniciated and leaded by Ludo(Marc Alier) and Jordi Piguillem
-// at the GESSI research group at UPC.
-// SimpleLTI consumer for Moodle is an implementation of the early specification of LTI
-// by Charles Severance (Dr Chuck) htp://dr-chuck.com , developed by Jordi Piguillem in a
-// Google Summer of Code 2008 project co-mentored by Charles Severance and Marc Alier.
-//
-// BasicLTI4Moodle is copyright 2009 by Marc Alier Forment, Jordi Piguillem and Nikolas Galanis
-// of the Universitat Politecnica de Catalunya http://www.upc.edu
-// Contact info: Marc Alier Forment granludo @ gmail.com or marc.alier @ upc.edu
+// This file is part of mod_aspirelists and was copied nearly verbatim from mod_lti's view.php.  If Moodle ever
+// separates the model from the view, we would ideally just use mod_lti's view.php, and launch.php.  Until then, we
+// can only acknowledge the efforts of those who helped make this so much simpler and copy their hard work.
 
 /**
- * This file contains all necessary code to view a lti activity instance
+ * This file contains all necessary code to view a Talis Aspire reading list by launching via LTI
  *
  * @package    mod
- * @subpackage lti
+ * @subpackage aspirelists
  * @copyright  2009 Marc Alier, Jordi Piguillem, Nikolas Galanis
  *  marc.alier@upc.edu
- * @copyright  2009 Universitat Politecnica de Catalunya http://www.upc.edu
+ * @copyright  2014 Talis Education Ltd., http://www.talis.com
  * @author     Marc Alier
  * @author     Jordi Piguillem
  * @author     Nikolas Galanis
  * @author     Chris Scribner
+ * @author     Ross Singer
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
-//require_once($CFG->dirroot.'/mod/lti/launch.php');
 require_once($CFG->dirroot.'/mod/aspirelists/lib.php');
-
 require_once($CFG->dirroot.'/mod/lti/lib.php');
 require_once($CFG->dirroot.'/mod/lti/locallib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course Module ID, or
-$l  = optional_param('l', 0, PARAM_INT);  // lti ID
+$l  = optional_param('l', 0, PARAM_INT);  // aspirelists ID
 
 if ($l) {  // Two ways to specify the module
     $list = $DB->get_record('aspirelists', array('id' => $l), '*', MUST_EXIST);
@@ -66,10 +51,10 @@ if ($l) {  // Two ways to specify the module
     $list = $DB->get_record('aspirelists', array('id' => $cm->instance), '*', MUST_EXIST);
 }
 
+$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+
 // Turn our aspirelist object more into something that the lti module is expecting
 aspirelists_add_lti_properties($list);
-
-$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 
 $tool = lti_get_tool_by_url_match($list->toolurl);
 if ($tool) {
@@ -89,8 +74,14 @@ $PAGE->set_url($url);
 
 $launchcontainer = lti_get_launch_container($list, $toolconfig);
 
-$PAGE->set_pagelayout('frametop'); //Most frametops don't include footer, and pre-post blocks
-$PAGE->blocks->show_only_fake_blocks(); //Disable blocks for layouts which do include pre-post blocks
+if ($launchcontainer == LTI_LAUNCH_CONTAINER_EMBED_NO_BLOCKS) {
+    $PAGE->set_pagelayout('frametop'); //Most frametops don't include footer, and pre-post blocks
+    $PAGE->blocks->show_only_fake_blocks(); //Disable blocks for layouts which do include pre-post blocks
+} else if ($launchcontainer == LTI_LAUNCH_CONTAINER_REPLACE_MOODLE_WINDOW) {
+    redirect('launch.php?id=' . $cm->id);
+} else {
+    $PAGE->set_pagelayout('incourse');
+}
 
 require_login($course);
 
@@ -98,7 +89,7 @@ require_login($course);
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
 
-add_to_log($course->id, "lti", "view", "view.php?id=$cm->id", "$list->id");
+add_to_log($course->id, "aspirelists", "view", "view.php?id=$cm->id", "$list->id");
 
 $pagetitle = strip_tags($course->shortname.': '.format_string($list->name));
 $PAGE->set_title($pagetitle);

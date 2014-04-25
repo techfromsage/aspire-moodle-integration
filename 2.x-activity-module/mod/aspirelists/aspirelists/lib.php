@@ -26,11 +26,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/** Display folder contents on a separate page */
+/** Display reading list on a separate page */
 define('ASPIRELISTS_DISPLAY_PAGE', 0);
-/** Display folder contents inline in a course */
+/** Embed reading list inline in a course */
 define('ASPIRELISTS_DISPLAY_INLINE', 1);
-
+/** URL of the TARL LTI launch path */
 define('ASPIRELISTS_LTI_LAUNCH_PATH', '/lti/launch');
 
 /**
@@ -41,7 +41,6 @@ define('ASPIRELISTS_LTI_LAUNCH_PATH', '/lti/launch');
  * @return mixed true if the feature is supported, null if unknown
  */
 function aspirelists_supports($feature) {
-    $aspirelists_cfg = get_config('aspirelists');
     switch($feature) {
         case FEATURE_MOD_INTRO:         return true;
         case FEATURE_SHOW_DESCRIPTION:        return true;
@@ -104,68 +103,21 @@ function aspirelists_delete_instance($id) {
     return $DB->delete_records("aspirelists", array("id" => $list->id));
 }
 
-///**
-// * Given a coursemodule object, this function returns the extra
-// * information needed to print this activity in various places.
-// * For this module we just need to support external urls as
-// * activity icons
-// *
-// * @param stdClass $coursemodule
-// * @return cached_cm_info info
-// */
-//function aspirelists_get_coursemodule_info($coursemodule) {
-//    global $DB, $CFG;
-//    require_once ($CFG->dirroot.'/mod/lti/lib.php');
-//    require_once($CFG->dirroot.'/mod/lti/locallib.php');
-//    error_log('coursemodule_info');
-//    if (!$lti = $DB->get_record('aspirelists', array('id' => $coursemodule->instance))) {
-//        return null;
-//    }
-//
-//    aspirelists_add_lti_properties($lti);
-//
-//    $info = new cached_cm_info();
-//
-//    // We want to use the right icon based on whether the
-//    // current page is being requested over http or https.
-//    if (lti_request_is_using_ssl() && !empty($lti->secureicon)) {
-//        $info->iconurl = new moodle_url($lti->secureicon);
-//    } else if (!empty($lti->icon)) {
-//        $info->iconurl = new moodle_url($lti->icon);
-//    }
-//
-//    if ($coursemodule->showdescription) {
-//        // Convert intro to html. Do not filter cached version, filters run at display time.
-//        $info->content = format_module_intro('lti', $lti, $coursemodule->id, false);
-//    }
-//
-//    // Does the link open in a new window?
-//    $tool = lti_get_tool_by_url_match($lti->toolurl);
-//    if ($tool) {
-//        $toolconfig = lti_get_type_config($tool->id);
-//    } else {
-//        $toolconfig = array();
-//    }
-//    $launchcontainer = lti_get_launch_container($lti, $toolconfig);
-//    if ($launchcontainer == LTI_LAUNCH_CONTAINER_WINDOW) {
-//        $launchurl = new moodle_url('/mod/lti/launch.php', array('id' => $coursemodule->id));
-//        $info->onclick = "window.open('" . $launchurl->out(false) . "', 'lti'); return false;";
-//    }
-//
-//    $info->name = $lti->name;
-//
-//    return $info;
-//}
-
+/**
+ * Add the necessary properties to an aspirelists object to pass it to mod_lti and succesfully launch a request
+ * @param stdClass &$aspirelist
+ */
 function aspirelists_add_lti_properties(&$aspirelist)
 {
+    global $CFG;
+
     $pluginSettings = get_config('mod_aspirelists');
 
     $aspirelist->toolurl = $pluginSettings->targetAspire . ASPIRELISTS_LTI_LAUNCH_PATH;
     $aspirelist->instructorchoiceacceptgrades = false;
     $aspirelist->instructorchoicesendname = false;
     $aspirelist->instructorchoicesendemailaddr = false;
-    $aspirelist->launchcontainer = LTI_LAUNCH_CONTAINER_EMBED;
+    $aspirelist->launchcontainer = null;
     $aspirelist->servicesalt = uniqid('', true);
     $course = get_course($aspirelist->course);
     $customLTIParams = array('launch_identifier='.uniqid());
@@ -201,8 +153,6 @@ function aspirelists_add_lti_properties(&$aspirelist)
 }
 
 /**
- * Overwrites the content in the course-module object with the folder files list
- * if folder.display == FOLDER_DISPLAY_INLINE
  *
  * @param cm_info $cm
  */
