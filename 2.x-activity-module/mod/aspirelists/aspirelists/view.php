@@ -112,8 +112,8 @@ if ( $launchcontainer == LTI_LAUNCH_CONTAINER_WINDOW ) {
     echo "</script>\n";
     echo "<p>".get_string("basiclti_in_new_window", "lti")."</p>\n";
 } else {
-    // Request the launch content with an object tag
-    echo '<object id="contentframe" height="600px" width="100%" type="text/html" data="launch.php?id='.$cm->id.'"></object>';
+    // Request the launch content with an iframe tag instead of the standard moodle LTI object tag
+    echo '<iframe id="contentframe" height="600px" width="100%" type="text/html" src="launch.php?id='.$cm->id.'" frameborder="0"></iframe>';
 
     //Output script to make the object tag be as large as possible
     $resize = '
