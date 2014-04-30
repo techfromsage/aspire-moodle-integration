@@ -34,13 +34,13 @@ At the next form, fill out the following:
     <dt>Tool Base URL</dt>
     <dd>http://{{baseUrlOfTalisAspireReadingLists}}/lti/launch</dd>
     <dt>Consumer Key</dt>
-    <dd>This should be *API key* from above</dd>
+    <dd>This should be <em>API key</em> from above</dd>
     <dt>Shared Secret</dt>
-    <dd>This should be *Shared secret* from above</dd>
+    <dd>This should be <em>Shared secret</em> from above</dd>
     <dt>Show tool type when creating tool instances</dt>
     <dd>Check this if you want TARL to appear as an option when an instructor adds an LTI resource</dd>
     <dt>Default Launch Container</dt>
-    <dd>Choose either *Embed* or *Embed, without blocks*, depending on your preference</dd>
+    <dd>Choose either <em>Embed</em> or <em>Embed, without blocks</em>, depending on your preference</dd>
 </dl>
 
 Everything else can be ignored for now.  Click *Save changes*.  Your external tool should now appear in the *Active* list.
