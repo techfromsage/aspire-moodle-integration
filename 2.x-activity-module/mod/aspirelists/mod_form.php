@@ -58,57 +58,6 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
          $mform->addHelpButton('showexpanded', 'showexpanded', 'mod_aspirelists');
          $mform->setDefault('showexpanded', 0);
 
-         $mform->addElement('hidden', 'instructorcustomparameters');
-         $mform->setType('instructorcustomparameters', PARAM_TEXT);
-         $customLTIParams = array('launch_identifier='.uniqid());
-         $baseKGCode = $COURSE->{$pluginSettings->courseCodeField};
-         if(isset($pluginSettings->targetKG))
-         {
-             $customLTIParams[] = "knowledge_grouping=".$pluginSettings->targetKG;
-         }
-         if(isset($pluginSettings->moduleCodeRegex))
-         {
-             if(preg_match("/".$pluginSettings->moduleCodeRegex."/", $baseKGCode, $matches))
-             {
-                 if(!empty($matches) && isset($matches[1]))
-                 {
-                    $baseKGCode = $matches[1];
-                 }
-             }
-         }
-         $customLTIParams[] = 'knowledge_grouping_code='.$baseKGCode;
-         if(isset($pluginSettings->timePeriodRegex) && isset($pluginSettings->timePeriodMapping))
-         {
-             $timePeriodMapping = json_decode($pluginSettings->timePeriodMapping, true);
-             if(preg_match("/".$pluginSettings->timePeriodRegex."/", $COURSE->{$pluginSettings->courseCodeField}, $matches))
-             {
-                 if(!empty($matches) && isset($matches[1]) && isset($timePeriodMapping[$matches[1]]))
-                 {
-                     $customLTIParams[] = 'time_period='.$timePeriodMapping[$matches[1]];
-                 }
-             }
-         }
-         $mform->setDefault('instructorcustomparameters', implode("\n", $customLTIParams));
-         $mform->addElement('hidden', 'instructorchoiceacceptgrades', "1");
-         $mform->setType('instructorchoiceacceptgrades', PARAM_BOOL);
-         $mform->addElement('hidden', 'typeid',$ltiTool->id);
-         $mform->setType('typeid', PARAM_INT);
-         $mform->addElement('hidden', 'toolurl', $ltiTool->baseurl);
-         $mform->setType('toolurl', PARAM_TEXT);
-         $mform->addElement('hidden', 'launchcontainer', LTI_LAUNCH_CONTAINER_EMBED);
-         $mform->setType('launchcontainer', PARAM_TEXT);
-         $mform->addElement('hidden', 'icon', get_string('icon_url', 'aspirelists'));
-         $mform->setType('icon', PARAM_TEXT);
-
-         // We don't actually need any user information right now
-         $mform->addElement('hidden', 'instructorchoicesendname', '', '0');
-         $mform->setType('instructorchoicesendname', PARAM_BOOL);
-
-         $mform->addElement('hidden', 'instructorchoicesendemailaddr', '', '0');
-         $mform->setType('instructorchoicesendemailaddr', PARAM_BOOL);
-
-
-
          $this->standard_coursemodule_elements();
          $this->add_action_buttons(true, get_string('save_and_continue', 'aspirelists'), false);
 

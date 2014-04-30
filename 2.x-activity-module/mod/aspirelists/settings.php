@@ -24,3 +24,5 @@
     $settings->add(new admin_setting_configtext('mod_aspirelists/timePeriodRegex',get_string('config_timePeriodRegex', 'mod_aspirelists'), get_string('config_timePeriodRegex_desc', 'mod_aspirelists'), get_string('config_timePeriodRegex_ex', 'mod_aspirelists') ));
 
     $settings->add(new admin_setting_configtext('mod_aspirelists/timePeriodMapping',get_string('config_timePeriodMapping', 'mod_aspirelists'), get_string('config_timePeriodMapping_desc', 'mod_aspirelists'), get_string('config_timePeriodMapping_ex', 'mod_aspirelists') ));
+
+    $settings->add(new admin_setting_configtext('mod_aspirelists/defaultInlineListHeight',get_string('config_defaultInlineListHeight', 'mod_aspirelists'), get_string('config_defaultInlineListHeight_desc', 'mod_aspirelists'), get_string('config_defaultInlineListHeight_default', 'mod_aspirelists') ));
