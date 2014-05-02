@@ -47,10 +47,10 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
              array(ASPIRELISTS_DISPLAY_PAGE => get_string('displaypage', 'aspirelists'),
                  ASPIRELISTS_DISPLAY_INLINE => get_string('displayinline', 'aspirelists')));
          $mform->addHelpButton('display', 'display', 'mod_aspirelists');
-         if (!$this->courseformat->has_view_page()) {
-             $mform->setConstant('display', ASPIRELISTS_DISPLAY_PAGE);
-             $mform->hardFreeze('display');
-         }
+        //  if (!$this->courseformat->has_view_page()) {
+        //      $mform->setConstant('display', ASPIRELISTS_DISPLAY_PAGE);
+        //      $mform->hardFreeze('display');
+        //  }
          $mform->setExpanded('course_display');
 
          // Adding option to show sub-folders expanded or collapsed by default.
