@@ -19,13 +19,8 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
          $ltiPlugin = plugin_manager::instance()->get_plugin_info('mod_lti');
 
          $ltiPluginId = $DB->get_field('modules', 'id', array('name'=>$ltiPlugin->name));
-//         $this->current->module = (string)$ltiPluginId;
-//         $this->current->modulename = $ltiPlugin->name;
-//         $this->current->add = $ltiPlugin->name;
-//         $this->_formname = 'mod_lti_mod_form';
 
          $mform =& $this->_form;
-//         $mform->_formName = 'mod_lti_mod_form';
          $mform->addElement('header', 'general', get_string('generalheader', 'aspirelists'));
          $mform->addElement('text', 'name', get_string('section_title', 'aspirelists'));
          $mform->setDefault('name', get_string('default_section_title', 'aspirelists'));
@@ -47,10 +42,7 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
              array(ASPIRELISTS_DISPLAY_PAGE => get_string('displaypage', 'aspirelists'),
                  ASPIRELISTS_DISPLAY_INLINE => get_string('displayinline', 'aspirelists')));
          $mform->addHelpButton('display', 'display', 'mod_aspirelists');
-        //  if (!$this->courseformat->has_view_page()) {
-        //      $mform->setConstant('display', ASPIRELISTS_DISPLAY_PAGE);
-        //      $mform->hardFreeze('display');
-        //  }
+
          if(method_exists($mform, 'setExpanded'))
          {
             $mform->setExpanded('course_display');
