@@ -51,7 +51,10 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
         //      $mform->setConstant('display', ASPIRELISTS_DISPLAY_PAGE);
         //      $mform->hardFreeze('display');
         //  }
-         $mform->setExpanded('course_display');
+         if(method_exists($mform, 'setExpanded'))
+         {
+            $mform->setExpanded('course_display');
+         }
 
          // Adding option to show sub-folders expanded or collapsed by default.
          $mform->addElement('advcheckbox', 'showexpanded', get_string('showexpanded', 'aspirelists'));
