@@ -119,7 +119,13 @@ function aspirelists_add_lti_properties(&$aspirelist)
     $aspirelist->instructorchoicesendemailaddr = false;
     $aspirelist->launchcontainer = null;
     $aspirelist->servicesalt = uniqid('', true);
-    $course = get_course($aspirelist->course);
+    if(function_exists('get_course'))
+    {
+        $course = get_course($aspirelist->course);
+    } else {
+        global $DB;
+        $course = $DB->get_record('course', array('id' => $aspirelist->course), '*', MUST_EXIST);
+    }
     $customLTIParams = array('launch_identifier='.uniqid());
     $baseKGCode = $course->{$pluginSettings->courseCodeField};
     if(isset($pluginSettings->targetKG))
