@@ -21,7 +21,7 @@ There is no warranty, either expressed or implied, covering the use or installat
 
 ## Pre-requisites
 
-A running Moodle instance. This block has been tested against Moodle v2.4. It has not been tested against any other version.
+A running Moodle instance. This block has been tested against Moodle 2.4.x, 2.5.x and v2.6.x It has not been tested against any other version.
 The 1.x version of the Moodle Block code resides in this repository, but is no longer maintained. No version 1.x code is included in the version 2.4 tar file.
 
 Our test environment was the Bitnami Moodle Stack (http://bitnami.org/stack/moodle) running in a local virtual machine.
