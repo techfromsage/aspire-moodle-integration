@@ -67,8 +67,6 @@ You should be taken to the **Course Resource List** settings page.  Fill out the
 <dl>
     <dt>Target Aspire URL</dt>
     <dd>This should be <em>http://{baseUrlOfTalisAspireReadingLists}</em> with no trailing slash.  It should be the same as you entered in <strong>Tool Base URL</strong> above, but leave off <em>/lti/launch</em></dd>
-    <dt>Target knowledge group</dt>
-    <dd>The level of TARL hierarchy represented by a <em>course</em> in Moodle (e.g. "module", "course", etc.)</dd>
     <dt>Module code field</dt>
     <dd>The course database field in Moodle that contains the module/course code that lists are associated with in TARL</dd>
     <dt>Module Code Regex</dt>
