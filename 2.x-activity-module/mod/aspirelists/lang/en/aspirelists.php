@@ -23,11 +23,6 @@ $string['config_targetAspire_desc'] = 'Enter the target Talis Aspire Campus Edit
 $string['config_targetAspire_default'] = 'Default: http://demo.talisaspire.com';
 $string['config_targetAspire_ex'] = 'http://demo.talisaspire.com';
 
-$string['config_kg'] = 'Target knowledge group';
-$string['config_kg_desc'] = 'Choose target knowledge grouping level you want to link at, e.g. course or module. <br />This terminology should match that implemented in your Talis Aspire hierarchy.';
-$string['config_kg_ex'] = 'Default: modules';
-
-
 $string['config_moduleCodeRegex'] = 'Module Code Regex';
 $string['config_moduleCodeRegex_desc'] = 'A regular expression which will capture the module code part of a Moodle Course ID. <br />This will be mapped to the module code as defined in Talis Aspire, the regex pattern must have a single group which will be the part of the course id which is used. The default would match ABC123_201213 and provide us with the value ABC123 in the regex group';
 $string['config_moduleCodeRegex_ex'] = '^([A-Za-z0-9]{6})_[0-9]{6}$' ;

@@ -128,10 +128,6 @@ function aspirelists_add_lti_properties(&$aspirelist)
     }
     $customLTIParams = array('launch_identifier='.uniqid());
     $baseKGCode = $course->{$pluginSettings->courseCodeField};
-    if(isset($pluginSettings->targetKG))
-    {
-        $customLTIParams[] = "knowledge_grouping=".$pluginSettings->targetKG;
-    }
     if(isset($pluginSettings->moduleCodeRegex))
     {
         if(preg_match("/".$pluginSettings->moduleCodeRegex."/", $baseKGCode, $matches))

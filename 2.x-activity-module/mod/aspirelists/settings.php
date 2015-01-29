@@ -12,9 +12,6 @@
         'programmes'=>get_string('programmes', 'mod_aspirelists'),
         'subjects'=>get_string('subjects', 'mod_aspirelists'));
 
-    $settings->add(new admin_setting_configselect('mod_aspirelists/targetKG', get_string('config_kg', 'mod_aspirelists'),
-        get_string('config_kg_desc', 'mod_aspirelists'), 'modules', $options));
-
     $settings->add(new admin_setting_configselect('mod_aspirelists/courseCodeField',
         get_string('course_code_field', 'mod_aspirelists'), get_string('course_code_field_desc', 'mod_aspirelists'),
         'idnumber', array('idnumber'=>'idnumber','shortname'=>'shortname','fullname'=>'fullname')));
