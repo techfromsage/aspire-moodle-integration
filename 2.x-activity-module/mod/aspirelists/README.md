@@ -4,7 +4,7 @@ Talis Aspire Reading Lists Moodle Integration
 Compatibility
 -------------
 
-This activity plugin has been tested with stable versions of Moodle 2.4, 2.5, 2.7, 2.8
+This activity plugin has been tested with stable versions of Moodle 2.4, 2.6, 2.7, 2.8
 If you do become aware of any issues affecting the plugin, then feel free to raise them with Talis directly, or by adding issues to the github repository.  Feel free to submit Pull Requests too!
 
 
