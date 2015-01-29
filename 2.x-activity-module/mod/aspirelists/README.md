@@ -44,7 +44,7 @@ At the next form, fill out the following:
     <dt>Shared Secret</dt>
     <dd>This should be <em>Shared secret</em> from above</dd>
     <dt>Custom Parameters</dt>
-    <dd>You will almost certainly need to add some custom parameters here - read [this article for more information](http://knowledge.talis.com/articles/tarl-lti/#parameters)</dd>
+    <dd>You will almost certainly need to add some custom parameters here - read <a href="http://knowledge.talis.com/articles/tarl-lti/#parameters" title="link to TARL LTI article">this article for more information</dd>
     <dt>Show tool type when creating tool instances</dt>
     <dd>Check this if you want TARL to appear as an option when an instructor adds an LTI resource as an External Tool</dd>
     <dt>Default Launch Container</dt>
