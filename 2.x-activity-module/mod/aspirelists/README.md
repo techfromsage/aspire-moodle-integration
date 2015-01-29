@@ -8,6 +8,8 @@ Copy the 2.x-activity-module/mod/aspirelists directory to your {MoodleRoot}/mod 
 
 Log in to Moodle as an administrator and you should be prompted to upgrade mod_aspirelists.
 
+If you are already logged in as an administrator - go to the 'notifications' page.
+
 "mod_lti" must also be enabled for this module to work.
 
 That's it!
@@ -15,12 +17,16 @@ That's it!
 Configuration
 -------------
 
-First off, you will need the **access-keys** permission enabled in *Talis Aspire Reading Lists*.  Once that is set, from
-the Talis Aspire Reading List navigation menu, select *Admin* -> *Integrations*.  On the "Integrations" page, click on *Add new access key*.
+## create access keys in Talis Aspire Reading Lists
 
-A form will appear, choose a distinct, descriptive name and click *Add*.
+First off, you will need to contact Talis Support to ask them to enable the **access-keys** permission in *Talis Aspire Reading Lists*.
 
-Make note of the **API key** and **Shared secret** that are generated.
+Once that is set, from the Talis Aspire Reading List navigation menu, select *Admin* -> *Integrations*.  On the "Integrations" page, click on *Add new access key*.
+
+* A form will appear, choose a distinct, descriptive name and click *Add*.
+* Make note of the **API key** and **Shared secret** that are generated.
+
+## Configure moodle to use the Talis Aspire Reading Lists LTI tool
 
 In Moodle, go to the *Site administration* menu and choose *Plugins* -> *Activity modules* -> *LTI*
 
@@ -37,8 +43,10 @@ At the next form, fill out the following:
     <dd>This should be <em>API key</em> from above</dd>
     <dt>Shared Secret</dt>
     <dd>This should be <em>Shared secret</em> from above</dd>
+    <dt>Custom Parameters</dt>
+    <dd>You will almost certainly need to add some custom parameters here - read [this article for more information](http://knowledge.talis.com/articles/tarl-lti/#parameters)</dd>
     <dt>Show tool type when creating tool instances</dt>
-    <dd>Check this if you want TARL to appear as an option when an instructor adds an LTI resource</dd>
+    <dd>Check this if you want TARL to appear as an option when an instructor adds an LTI resource as an External Tool</dd>
     <dt>Default Launch Container</dt>
     <dd>Choose either <em>Embed</em> or <em>Embed, without blocks</em>, depending on your preference</dd>
 </dl>
