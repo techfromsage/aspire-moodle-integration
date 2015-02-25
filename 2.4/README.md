@@ -21,7 +21,7 @@ There is no warranty, either expressed or implied, covering the use or installat
 
 ## Pre-requisites
 
-A running Moodle instance. This block has been tested against Moodle v2.4. It has not been tested against any other version.
+A running Moodle instance. This block has been tested against Moodle 2.4.x, 2.5.x and v2.6.x It has not been tested against any other version.
 The 1.x version of the Moodle Block code resides in this repository, but is no longer maintained. No version 1.x code is included in the version 2.4 tar file.
 
 Our test environment was the Bitnami Moodle Stack (http://bitnami.org/stack/moodle) running in a local virtual machine.
@@ -58,6 +58,10 @@ The block needs to be configured to point to your Talis Aspire tenancy
 7. Now setup the block:
   7. choose _Site Administration >> Plugins >> Blocks >> Talis Aspire Resource Lists_ 
   7. Configure the plugin for your local installation
+    * You will need the following for a basic installation:
+      * Your Talis Aspire Base URL: e.g. http://readinglists.institution.ac.uk
+      * To know whether your lists are attached to `modules`, `courses`, `units`, etc...
+      * A couple of regular expressions to choose the bits of your Moodle CourseID that Talis Aspire is interested in.  The first regular expression should allow a match to module codes in Talis Aspire. The second regular expression is used to match to time period slugs in Talis Aspire.  If you need help with these, please [raise a ticket](http://support.talisaspire.com) with some example Moodle codes, and we'll give you a hand.
 
 ## Making it live
 
