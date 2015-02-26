@@ -1,0 +1,10 @@
+{
+    "name": "moodle-mod_aspirelists-inline_display",
+    "builds": {
+        "moodle-mod_aspirelists-inline_display": {
+            "jsfiles": [
+                "inline_display.js"
+            ]
+        }
+    }
+}
