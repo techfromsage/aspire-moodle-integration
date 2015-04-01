@@ -5,6 +5,8 @@
 
     $settings->add(new admin_setting_configtext('aspirelists/targetAspire',get_string('config_targetAspire', 'block_aspirelists'),get_string('config_targetAspire_desc', 'block_aspirelists'),get_string('config_targetAspire_ex', 'block_aspirelists')));
 
+    $settings->add(new admin_setting_configtext('aspirelists/targetAspireAlias',get_string('config_targetAspireAlias', 'block_aspirelists'),get_string('config_targetAspireAlias_desc', 'block_aspirelists'),get_string('config_targetAspireAlias_ex', 'block_aspirelists')));
+
     $options = array(
         'modules'=>get_string('modules', 'block_aspirelists'), 
         'courses'=>get_string('courses', 'block_aspirelists'), 
