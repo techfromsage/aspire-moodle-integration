@@ -16,6 +16,8 @@ class block_aspirelists extends block_base {
     }
 
 	$site = get_config('aspirelists', 'targetAspire');
+    $httpsAlias = get_config('aspirelists', 'targetAspireAlias');
+
 	if (empty($site))
 	{
 		$this->content->text = get_string('no_base_url_configured', 'block_aspirelists');
@@ -79,12 +81,22 @@ class block_aspirelists extends block_base {
         }
 
         // build the target URL of the JSON data we'll be requesting from Aspire
-        if($urlTimePeriod != ''){
-            $url = "{$site}/{$targetKG}/{$urlModuleCode}/lists/{$urlTimePeriod}.json";
+
+        if(!empty($httpsAlias))
+        {
+            $baseUrl = $httpsAlias;
         }
         else
         {
-            $url = "{$site}/{$targetKG}/{$urlModuleCode}/lists.json";
+            $baseUrl = $site;
+        }
+
+        if($urlTimePeriod != ''){
+            $url = "{$baseUrl}/{$targetKG}/{$urlModuleCode}/lists/{$urlTimePeriod}.json";
+        }
+        else
+        {
+            $url = "{$baseUrl}/{$targetKG}/{$urlModuleCode}/lists.json";
         }
 		// using php curl, we'll now request the JSON data from Aspire
 		$ch = curl_init();
@@ -102,6 +114,7 @@ class block_aspirelists extends block_base {
 		if ($response) // if we get a valid response from curl...
 		{
 			$data = json_decode($response,true); // decode the returned JSON data
+            // JSON data will be using the non https alias.
 			if(isset($data["$site/$targetKG/$urlModuleCode"]) && isset($data["$site/$targetKG/$urlModuleCode"]['http://purl.org/vocab/resourcelist/schema#usesList'])) // if there are any lists...
 			{
 				$lists = array();

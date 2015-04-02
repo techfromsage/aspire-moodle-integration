@@ -8,9 +8,14 @@ $string['no_base_url_configured'] = 'Talis Aspire base URL not configured. Conta
 $string['no_resource_lists_msg'] = 'No resource lists found';
 
 $string['config_targetAspire'] = 'Target Aspire URL';
-$string['config_targetAspire_desc'] = 'Enter the target Talis Aspire Campus Edition base URL. IMPORTANT: Do not add a trailing slash to the URL.';
+$string['config_targetAspire_desc'] = 'Enter your Talis Aspire base URL. IMPORTANT: Do not add a trailing slash to the URL.';
 $string['config_targetAspire_default'] = 'Default: http://demo.talisaspire.com';
 $string['config_targetAspire_ex'] = 'http://demo.talisaspire.com';
+
+$string['config_targetAspireAlias'] = 'Aspire URL HTTPS Alias';
+$string['config_targetAspireAlias_desc'] = 'Enter the Talis Aspire HTTPS base URL. IMPORTANT: Do not add a trailing slash to the URL.';
+$string['config_targetAspireAlias_default'] = 'Default: https://{tenancyShortCode}.rl.talis.com';
+$string['config_targetAspireAlias_ex'] = 'https://broadminster.rl.talis.com';
 
 $string['config_kg'] = 'Target knowledge group';
 $string['config_kg_desc'] = 'Choose target knowledge grouping level you want to link at, e.g. course or module. <br />This terminology should match that implemented in your Talis Aspire hierarchy.';
