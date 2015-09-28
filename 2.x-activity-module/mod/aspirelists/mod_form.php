@@ -7,7 +7,16 @@ require_once ($CFG->dirroot.'/mod/aspirelists/lib.php');
 require_once ($CFG->dirroot.'/mod/lti/lib.php');
 require_once ($CFG->dirroot.'/mod/lti/locallib.php');
 require_once ($CFG->dirroot.'/mod/lti/mod_form.php');
-require_once ($CFG->dirroot.'/lib/pluginlib.php');
+
+// Require the plugin manager
+if($CFG->version >= 2013111800) {
+    // From Moodle 2.6 onwards we need to load the plugin manager class
+    require_once ($CFG->dirroot.'/lib/classes/plugin_manager.php');
+}
+else{
+    // Prior to Moodle 2.6 we need to load pluginlib.php to get the plugin manager
+    require_once($CFG->dirroot . '/lib/pluginlib.php');
+}
 
 class mod_aspirelists_mod_form extends mod_lti_mod_form {
      function definition() {
@@ -16,7 +25,7 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
 
          $launchUrl = $pluginSettings->targetAspire . ASPIRELISTS_LTI_LAUNCH_PATH;
          $ltiTool = lti_get_tool_by_url_match($launchUrl);
-         $ltiPlugin = plugin_manager::instance()->get_plugin_info('mod_lti');
+         $ltiPlugin = $this->getPluginManager()->get_plugin_info('mod_lti');
 
          $ltiPluginId = $DB->get_field('modules', 'id', array('name'=>$ltiPlugin->name));
 
@@ -57,4 +66,19 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
          $this->add_action_buttons(true, get_string('save_and_continue', 'aspirelists'), false);
 
      }
+
+    /**
+     * Return the plugin manager instance
+     *
+     * @return mixed
+     */
+    function getPluginManager(){
+        global $CFG;
+        // Prior to moodle 2.6
+        if($CFG->version < 2013111800) {
+            return plugin_manager::instance();
+        }
+        // After moodle 2.6
+        return core_plugin_manager::instance();
+    }
 }
