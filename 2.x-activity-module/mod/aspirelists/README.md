@@ -4,7 +4,7 @@ Talis Aspire Reading Lists Moodle Integration
 Compatibility
 -------------
 
-This activity plugin has been tested with stable versions of Moodle 2.4, 2.6, 2.7, 2.8
+This activity plugin has been tested with stable versions of Moodle 2.4, 2.6, 2.7, 2.8, 2.9
 If you do become aware of any issues affecting the plugin, then feel free to raise them with Talis directly, or by adding issues to the github repository.  Feel free to submit Pull Requests too!
 
 
@@ -19,8 +19,6 @@ If you are already logged in as an administrator - go to the 'notifications' pag
 
 "mod_lti" must also be enabled for this module to work.
 
-That's it!
-
 Configuration
 -------------
 
@@ -32,6 +30,7 @@ Once that is set, from the Talis Aspire Reading List navigation menu, select *Ad
 
 * A form will appear, choose a distinct, descriptive name and click *Add*.
 * Make note of the **API key** and **Shared secret** that are generated.
+* Do not share key's and secrets between different instances of moodle.
 
 ## Configure moodle to use the Talis Aspire Reading Lists LTI tool
 
@@ -45,7 +44,7 @@ At the next form, fill out the following:
     <dt>Tool Name</dt>
     <dd>Whatever you call Talis Aspire Reading Lists at your institution.</dd>
     <dt>Tool Base URL</dt>
-    <dd>http://{{baseUrlOfTalisAspireReadingLists}}/lti/launch</dd>
+    <dd>https://{{tenancyShortName}}.rl.talis.com/lti/launch</dd>
     <dt>Consumer Key</dt>
     <dd>This should be <em>API key</em> from above</dd>
     <dt>Shared Secret</dt>
@@ -53,7 +52,7 @@ At the next form, fill out the following:
     <dt>Custom Parameters</dt>
     <dd>You will almost certainly need to add some custom parameters here - read <a href="http://knowledge.talis.com/articles/tarl-lti/#parameters" title="link to TARL LTI article">this article for more information</a></dd>
     <dt>Show tool type when creating tool instances</dt>
-    <dd>Check this if you want TARL to appear as an option when an instructor adds an LTI resource as an External Tool</dd>
+    <dd>Check this if you want TARL to appear as an option when an instructor adds an LTI resource as an External Tool (note that you may not need to do this as the ativity module will add a 'resource' which can be chosen instead of using the built-in 'External Tool' activity type)</dd>
     <dt>Default Launch Container</dt>
     <dd>Choose either <em>Embed</em> or <em>Embed, without blocks</em>, depending on your preference</dd>
 </dl>
@@ -66,21 +65,23 @@ You should be taken to the **Course Resource List** settings page.  Fill out the
 
 <dl>
     <dt>Target Aspire URL</dt>
-    <dd>This should be <em>http://{baseUrlOfTalisAspireReadingLists}</em> with no trailing slash.  It should be the same as you entered in <strong>Tool Base URL</strong> above, but leave off <em>/lti/launch</em></dd>
+    <dd>This should be <em>https://{tenancyShortName}.rl.talis.com</em> with no trailing slash.  It should be the same as you entered in <strong>Tool Base URL</strong> above, but leave off <code>/lti/launch</code></dd>
     <dt>Module code field</dt>
     <dd>The course database field in Moodle that contains the module/course code that lists are associated with in TARL</dd>
     <dt>Module Code Regex</dt>
-    <dd>Often module/course codes need to be rewritten slightly to match what is in TARL, enter a regex that matches the module code here</dd>
+    <dd>Often module/course codes need to be rewritten slightly to match what is in TARL, enter a regex that will pick out the module code in the first matching group</dd>
     <dt>Time Period Regex</dt>
-    <dd>If the module code in Moodle contains the time period for the course, enter a regex that identifies it in the string</dd>
+    <dd>If the module code in Moodle contains the time period for the course, enter a regex that identifies it in the first matching group. The time period code here will need to match the 'slug' of a time period in Talis Aspire Reading Lists</dd>
     <dt>Time Period Mapping</dt>
-    <dd>A JSON string that maps the strings extracted from the above regex to the time period slugs in TARL</dd>
+    <dd>A JSON string that maps the strings extracted from the above regex to the time period slugs in TARL - you only need to do use this if you have multiple codes in moodle that need to map to the same time periods in Talis Aspire</dd>
     <dt>Default height of an embedded list</dt>
     <dd>If a list is displayed inline within a course, this value will control the default height of the iframe</dd>
 </dl>
 
 Click *Save changes*.  **Course Resource List** should now be available as **Resource** in the *Add an activity or resource*
 menu when editing a course.
+
+If you need help with any of the settings here, please contact [support@talis.com](mailto:support@talis.com) with screen shots of the above settings pages.
 
 
 
