@@ -5,6 +5,11 @@ require_once($CFG->dirroot.'/mod/aspirelists/lib.php');
 require_once($CFG->dirroot.'/mod/lti/lib.php');
 require_once($CFG->dirroot.'/mod/lti/locallib.php');
 
+// make sure that this launch.php page is not cached by any proxies.
+header("Cache-Control: no-cache, must-revalidate");
+header("Expires: Thu, 01 Dec 1994 16:00:00 GMT");
+header("Pragma: no-cache");
+
 $id = required_param('id', PARAM_INT); // Course Module ID
 
 $cm = get_coursemodule_from_id('aspirelists', $id, 0, false, MUST_EXIST);
