@@ -13,9 +13,23 @@ Users will be able to select and emebed lists (or sections of lists) in their mo
 
 This module is being actively maintained by Talis (and you are welcome to submit your own pull requests!)
 
+### What version are you using?
+To determine what version of this activity module you are using, 
+
+* in Moodle
+* go to your 'Plugin Overview' page `{moodlesite}/admin/plugins.php`
+* search for mod_aspirelists and note the version in the version column.
+
 ## 2.4
 
 This is a block plugin which allows a moodle block to be added to courses. It is very simplistic in how it does this.
+
+### What version are you using?
+To determine what version of this block you are using, 
+
+* in Moodle
+* go to your 'Plugin Overview' page `{moodlesite}/admin/plugins.php`
+* search for block_aspirelists and note the version in the version column.
 
 ## 1.x
 
