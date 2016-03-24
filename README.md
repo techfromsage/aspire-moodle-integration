@@ -18,7 +18,7 @@ To determine what version of this activity module you are using,
 
 * in Moodle
 * go to your 'Plugin Overview' page `{moodlesite}/admin/plugins.php`
-* search for mod_aspirelists and note the version in the version column.
+* search for **mod_aspirelists** and note the version in the version column.
 
 ## 2.4
 
@@ -29,7 +29,7 @@ To determine what version of this block you are using,
 
 * in Moodle
 * go to your 'Plugin Overview' page `{moodlesite}/admin/plugins.php`
-* search for block_aspirelists and note the version in the version column.
+* search for **block_aspirelists** and note the version in the version column.
 
 ## 1.x
 
