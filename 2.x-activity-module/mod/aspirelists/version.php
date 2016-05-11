@@ -7,7 +7,7 @@ if (!isset($plugin)) {
     $plugin = new stdClass();
 }
 
-$plugin->version   = 2016051100;
+$plugin->version   = 2016051100; // Version for this plugin - based on the date and then an increment number
 $plugin->requires  = 2012062507; // See http://docs.moodle.org/dev/Moodle_Versions
 $plugin->cron      = 0;
 $plugin->component = 'mod_aspirelists';
