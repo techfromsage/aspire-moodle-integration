@@ -1,4 +1,5 @@
 <?php
+require_once($CFG->dirroot . '/lib/completionlib.php');
 
 // This file is part of Moodle - http://moodle.org/
 //

@@ -38,6 +38,7 @@ require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once($CFG->dirroot.'/mod/aspirelists/lib.php');
 require_once($CFG->dirroot.'/mod/lti/lib.php');
 require_once($CFG->dirroot.'/mod/lti/locallib.php');
+require_once($CFG->dirroot . '/lib/completionlib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course Module ID, or
 $l  = optional_param('l', 0, PARAM_INT);  // aspirelists ID
