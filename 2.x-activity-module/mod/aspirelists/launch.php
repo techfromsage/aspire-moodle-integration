@@ -20,5 +20,11 @@ add_to_log($course->id, "aspirelists", "launch", "launch.php?id=$cm->id", "$list
 
 $list->cmid = $cm->id;
 aspirelists_add_lti_properties($list);
-lti_view($list);
-
+if($CFG->version >= 2013111800) {
+    // Moodle 3.0 renamed the method (lti_view has been re-purposed)
+    lti_launch_tool($list);
+}
+else{
+    // Moodle 1.x/2.x
+    lti_view($list);
+}
