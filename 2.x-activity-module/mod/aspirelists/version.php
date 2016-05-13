@@ -11,7 +11,7 @@ $plugin->version   = 2016051100; // Version for this plugin - based on the date 
 $plugin->requires  = 2012062507; // See http://docs.moodle.org/dev/Moodle_Versions
 $plugin->cron      = 0;
 $plugin->component = 'mod_aspirelists';
-$plugin->maturity  = MATURITY_ALPHA;
+$plugin->maturity  = MATURITY_BETA;
 $plugin->release   = '.0001';
 
 if ($CFG->branch < 26) {
