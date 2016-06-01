@@ -34,7 +34,6 @@ class mod_aspirelists_lib_testcase extends advanced_testcase {
         $this->assertNotNull($list->servicesalt);
 
         $this->assertRegExp("/^launch_identifier=\w*\n/", $list->instructorcustomparameters);
-        $this->assertContains("knowledge_grouping=module\n", $list->instructorcustomparameters);
         $this->assertContains("knowledge_grouping_code=TEST01\n", $list->instructorcustomparameters);
         $this->assertContains("time_period=" . $mapping[$year], $list->instructorcustomparameters);
         $this->assertFalse($list->debuglaunch);
@@ -50,7 +49,6 @@ class mod_aspirelists_lib_testcase extends advanced_testcase {
         aspirelists_add_lti_properties($list);
         $this->assertEquals('https://test.rl.talisaspire.com/lti/launch', $list->toolurl);
         $this->assertRegExp("/^launch_identifier=\w*\n/", $list->instructorcustomparameters);
-        $this->assertContains("knowledge_grouping=course\n", $list->instructorcustomparameters);
         $this->assertContains("knowledge_grouping_code=tc_1", $list->instructorcustomparameters);
         // This shouldn't have been added because there was no regex to match it
         $this->assertNotContains("time_period=", $list->instructorcustomparameters);
