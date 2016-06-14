@@ -1,5 +1,7 @@
 # Talis Reading List integrations with Moodle
 
+[![Build Status](https://travis-ci.org/talis/aspire-moodle-integration.svg?branch=master)](https://travis-ci.org/talis/aspire-moodle-integration)
+
 This repository contains three integrations between Moodle and Talis Aspire. A description of each follows to help you choose the right one for you.
 
 There are individual README files for each plugin which contain installation and other useful instructions.
