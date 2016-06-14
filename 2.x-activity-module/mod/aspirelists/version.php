@@ -14,12 +14,15 @@ $plugin->component = 'mod_aspirelists';
 $plugin->maturity  = MATURITY_BETA;
 $plugin->release   = '.0001';
 
-if ($CFG->branch < 26) {
-    // Used by Moodle 2.5 and below.
-    $module->version = $plugin->version;
-    $module->cron = $plugin->cron;
-    $module->maturity = $plugin->maturity;
-    $module->release = $plugin->release;
-    $module->requires = $plugin->requires;
-    $module->component = $plugin->component;
+if (isset($CFG->version))
+{
+    if($CFG->version < 2013111800) {
+        // Used by Moodle 2.5 and below.
+        $module->version = $plugin->version;
+        $module->cron = $plugin->cron;
+        $module->maturity = $plugin->maturity;
+        $module->release = $plugin->release;
+        $module->requires = $plugin->requires;
+        $module->component = $plugin->component;
+    }
 }
