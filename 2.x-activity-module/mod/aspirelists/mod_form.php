@@ -35,7 +35,13 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
          $mform->setDefault('name', get_string('default_section_title', 'aspirelists'));
          $mform->addRule('name', null, 'required', null, 'client');
          $mform->setType('name', PARAM_TEXT);
-         $this->add_intro_editor(false);
+
+         if($CFG->version >= 2015111600 ) { // greater or in Moodle 3.0.
+             $this->standard_intro_elements(false);
+         } else {
+             $this->add_intro_editor(false);
+         }
+
          $mform->setAdvanced('introeditor');
 
          // Display the label to the right of the checkbox so it looks better & matches rest of the form

@@ -4,6 +4,7 @@ require_once("../../config.php");
 require_once($CFG->dirroot.'/mod/aspirelists/lib.php');
 require_once($CFG->dirroot.'/mod/lti/lib.php');
 require_once($CFG->dirroot.'/mod/lti/locallib.php');
+require_once($CFG->dirroot.'/mod/aspirelists/classes/event/aspirelists_launch.php');
 
 // make sure that this launch.php page is not cached by any proxies.
 header("Cache-Control: no-cache, must-revalidate");
@@ -15,8 +16,21 @@ $id = required_param('id', PARAM_INT); // Course Module ID
 $cm = get_coursemodule_from_id('aspirelists', $id, 0, false, MUST_EXIST);
 $list = $DB->get_record('aspirelists', array('id' => $cm->instance), '*', MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+$context = context_module::instance($cm->id);
 
-add_to_log($course->id, "aspirelists", "launch", "launch.php?id=$cm->id", "$list->id");
+if($CFG->version < 2014051200) {
+    add_to_log($course->id, "aspirelists", "launch", "launch.php?id=$cm->id", "$list->id");
+} else {
+    $event = \aspirelists\event\aspire_lists_launch::create(
+        array(
+            'objectid' => $cm->instance,
+            'context' => $context,
+            'other' => $list->id
+        )
+    );
+    $event->set_legacy_logdata(array($course->id, "aspirelists", "launch", "launch.php?id=$cm->id", "$list->id"));
+    $event->trigger();
+}
 
 $list->cmid = $cm->id;
 aspirelists_add_lti_properties($list);
