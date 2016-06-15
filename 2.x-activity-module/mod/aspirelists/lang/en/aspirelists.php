@@ -5,6 +5,8 @@
 $string['modulename'] = 'Course Resource List';
 $string['pluginname'] = 'Course Resource List';
 
+$string['eventAspireLaunch'] = 'Talis Aspire Launch Event';
+
 $string['pluginadministration'] = 'Course resource list administration';
 
 

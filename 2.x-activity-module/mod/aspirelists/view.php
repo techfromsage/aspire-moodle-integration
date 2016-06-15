@@ -39,6 +39,7 @@ require_once($CFG->dirroot.'/mod/aspirelists/lib.php');
 require_once($CFG->dirroot.'/mod/lti/lib.php');
 require_once($CFG->dirroot.'/mod/lti/locallib.php');
 require_once($CFG->dirroot . '/lib/completionlib.php');
+require_once($CFG->dirroot.'/mod/aspirelists/classes/event/course_module_viewed.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course Module ID, or
 $l  = optional_param('l', 0, PARAM_INT);  // aspirelists ID
@@ -90,7 +91,16 @@ require_login($course);
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
 
-add_to_log($course->id, "aspirelists", "view", "view.php?id=$cm->id", "$list->id");
+$event = \aspirelists\event\course_module_viewed::create(
+    array(
+        'objectid' => $PAGE->cm->instance,
+        'context'  => $context,
+        'other'    => $list->id
+    )
+);
+$event->add_record_snapshot('course', $PAGE->course);
+$event->set_legacy_logdata(array($course->id, "aspirelists", "view", "view.php?id=$cm->id", "$list->id"));
+$event->trigger();
 
 $pagetitle = strip_tags($course->shortname.': '.format_string($list->name));
 $PAGE->set_title($pagetitle);

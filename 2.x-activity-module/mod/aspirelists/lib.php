@@ -118,6 +118,9 @@ function aspirelists_add_lti_properties(&$aspirelist)
     $aspirelist->instructorchoiceacceptgrades = false;
     $aspirelist->instructorchoicesendname = false;
     $aspirelist->instructorchoicesendemailaddr = false;
+    if($CFG->version >= 2015051100 ) { // greater or in Moodle 2.9.
+        $aspirelist->instructorchoiceallowroster = false;
+    }
     $aspirelist->launchcontainer = null;
     $aspirelist->servicesalt = uniqid('', true);
     if(function_exists('get_course'))
@@ -161,11 +164,11 @@ function aspirelists_add_lti_properties(&$aspirelist)
  */
 function aspirelists_cm_info_view(cm_info $cm) {
     global $CFG,$PAGE;
-    if ($cm->uservisible && $cm->get_custom_data()) {
+    if ($cm->uservisible && $cm->customdata) {
         // Restore folder object from customdata.
         // Note the field 'customdata' is not empty IF AND ONLY IF we display contens inline.
         // Otherwise the content is default.
-        $aspirelist = $cm->get_custom_data();
+        $aspirelist = $cm->customdata;
         $aspirelist->id = (int)$cm->instance;
         $aspirelist->course = (int)$cm->course;
         $aspirelist->display = ASPIRELISTS_DISPLAY_INLINE;
@@ -195,11 +198,11 @@ function aspirelists_cm_info_view(cm_info $cm) {
  */
 function aspirelists_cm_info_dynamic(cm_info $cm) {
     global $CFG;
-    if ($cm->get_custom_data()) {
+    if ($cm->customdata) {
         // the field 'customdata' is not empty IF AND ONLY IF we display contens inline
         require_once($CFG->dirroot . '/mod/aspirelists/load_js.php');
         $cm->set_extra_classes('aspirelists_inline_readings_toggle');
-        $aspirelist = $cm->get_custom_data();
+        $aspirelist = $cm->customdata;
         if(isset($aspirelist->showexpanded) && $aspirelist->showexpanded === '1')
         {
             $afterLink = get_string('accordion_open', 'aspirelists');
