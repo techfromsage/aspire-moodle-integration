@@ -17,6 +17,7 @@ $string['no_resource_lists_msg'] = 'No resource lists found';
 $string['aspirelists:addinstance'] = 'Add course reading';
 $string['aspirelists:updateinstance'] = 'Update course reading';
 $string['aspirelists:view'] = 'View course reading';
+$string['aspirelists:download'] = 'Download course reading';
 $string['aspirelists:addcoursetool'] = '';
 $string['aspirelists:requesttooladd'] = '';
 $string['aspirelists:manage'] = '';
