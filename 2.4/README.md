@@ -64,6 +64,7 @@ The block needs to be configured to point to your Talis Aspire tenancy
       * Your Talis Aspire Base URL: e.g. http://readinglists.institution.ac.uk
       * To know whether your lists are attached to `modules`, `courses`, `units`, etc...
       * A couple of regular expressions to choose the bits of your Moodle CourseID that Talis Aspire is interested in.  The first regular expression should allow a match to module codes in Talis Aspire. The second regular expression is used to match to time period slugs in Talis Aspire.  If you need help with these, please [raise a ticket](http://support.talisaspire.com) with some example Moodle codes, and we'll give you a hand.
+    * **HTTPS and Talis Aspire.** If your Talis Aspire tenancy is running with HTTPS forced to true, you will need to add your HTTPS Alias to the plugin configuration. In all other cases **Leave this blank**.
 
 ## Making it live
 
