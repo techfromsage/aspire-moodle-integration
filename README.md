@@ -6,14 +6,19 @@ This repository contains three integrations between Moodle and Talis Aspire. A d
 
 There are individual README files for each plugin which contain installation and other useful instructions.
 
+## Moodle 3.x
 
-## 2.x-activity-module
+Please use the 2.x activity module named below. The activity module has been tested with all current versions of Moodle. [See the full matrix of versions tested](https://travis-ci.org/talis/aspire-moodle-integration).
+
+## 2.x-activity-module 
 
 This is an activity module which is essentially a wrapper for our [Talis Reading List LTI Tool](http://knowledge.talis.com/articles/tarl-lti/).
 
 Users will be able to select and emebed lists (or sections of lists) in their moodle courses. Lists and sections can be either displayed in-line or can be shown in embedded pages within Moodle.
 
 This module is being actively maintained by Talis (and you are welcome to submit your own pull requests!)
+
+This module is tested against all current versions of Moodle. [See the full matrix of versions tested](https://travis-ci.org/talis/aspire-moodle-integration).
 
 ### What version are you using?
 To determine what version of this activity module you are using, 
