@@ -1,6 +1,8 @@
 M.mod_aspirelists = M.mod_aspirelists || {};
 NS = M.mod_aspirelists.inline_display = {};
 
+NS.inline_display_delay = 1000;
+
 NS.init_view = function(accordionOpen, accordionClosed) {
     Y.delegate('click', this.toggle_inline_list, Y.config.doc, '.aspirelists_inline_readings_toggle .activityinstance a', this);
     Y.on('domready', this.resize_embedded_lists);
@@ -35,11 +37,10 @@ NS.toggle_inline_list = function(e)
             }
         });
     }
-}
+};
 
 NS.resize_embedded_lists = function(e)
 {
-    console.log("resizeing");
     Y.all('.aspirelists_inline_list').each(function(o){
         var width = o.ancestor('.aspirelists').get("offsetWidth");
 
@@ -59,52 +60,37 @@ NS.resize_embedded_lists = function(e)
 
         o.setAttribute('width', width);
     });
-}
+};
 
 NS.add_to_iframe_load_queue = function(src, element){
-    this.iframeQueue.push({'src':src, 'element': element})
-}
+    this.iframeQueue.push({'src':src, 'element': element});
+};
 
-NS.processNextOnQueue = function(){
-    var iframeData = this.iframeQueue.shift();
-    console.log(iframeData);
-    var src = iframeData['src'];
-    var element = iframeData['element'];
+NS.populateIFrame = function(iFrameData){
+    var src = iFrameData.src;
+    var element = iFrameData.element;
     element.setAttribute('src', src);
-    return element;
-}
+};
 
-NS.waitForIframeToLoad = function(element, callback) {
-    console.log(element);
-    console.log("--")
-    var win = Y.Node.getDOMNode(element.get('contentWindow'));
-    var iframeDoc = win.document;
-    // Check if loading is complete
-    if (iframeDoc.readyState == 'complete') {
-        win.onload = function () {
-            console.log("done a thing");
-            alert("hello");
-            return callback();
-        }
+NS.processNextInQueue = function() {
+    console.log("Calling");
+    // Process the first launch call
+    var iFrameData = this.iframeQueue.shift();
+    if(iFrameData === undefined){
+        // In this case we have called all elements to load and can complete
+        return;
     }
-    else {
-        // If we are here, it is not loaded. Set things up so we check   the status again in 100 milliseconds
-        window.setTimeout(NS.waitForIframeToLoad(element, callback), 100);
-    }
-}
-
-NS.processQueue = function() {
-    var element = NS.processNextOnQueue();
-    NS.waitForIframeToLoad(element, function(){
-        NS.processNextOnQueue();
-    });
-}
+    NS.populateIFrame(iFrameData);
+    // Set up a timeout to continue iterating over the calls
+    window.setTimeout(function(){
+        NS.processNextInQueue();
+    }, NS.inline_display_delay);
+};
 
 NS.load_queued_iframes = function(e){
-    console.log("here");
     Y.all('.aspirelists_inline_list').each(function (o) {
         var src = o.getData('intended-src');
         NS.add_to_iframe_load_queue(src, o);
     });
-    NS.processQueue();
-}
+    NS.processNextInQueue();
+};
