@@ -6,7 +6,7 @@ NS = M.mod_aspirelists.inline_display = {};
 NS.init_view = function(accordionOpen, accordionClosed) {
     Y.delegate('click', this.toggle_inline_list, Y.config.doc, '.aspirelists_inline_readings_toggle .activityinstance a', this);
     Y.on('domready', this.resize_embedded_lists);
-    Y.on('domready', this.queueInlineIFrames.init());
+    Y.on('domready', this.queueExpandedInlineIFrames.init());
     this.accordionOpen = accordionOpen;
     this.accordionClosed = accordionClosed;
 };
@@ -29,6 +29,11 @@ NS.toggle_inline_list = function(e)
             if(n.getStyle('display') === 'none')
             {
                 n.show();
+                if(n.getAttribute('src') === ''){
+                    // if the iFrame's src has not yet been set then time to set it
+                    var src = n.getData('intended-src');
+                    n.setAttribute('src', src);
+                }
                 NS.toggleAccordionIndicator(n, NS.accordionOpen);
             } else {
                 n.hide();
@@ -62,17 +67,21 @@ NS.resize_embedded_lists = function(e)
 };
 
 /**
+ * Queue all expanded inline IFrames
  *
+ * This will ignore any inline iframes which are
+ * currently collapsed.  These will be
+ * loaded when the user interacts with them.
+ *
+ * Call .init() to start the process
  */
-NS.queueInlineIFrames = {
+NS.queueExpandedInlineIFrames = {
     iframeQueue: [],
     inline_display_delay: 1000,
     add_to_iframe_load_queue: function(src, element){
         this.iframeQueue.push({'src':src, 'element': element});
     },
-    populateIFrame: function(iFrameData){
-        var src = iFrameData.src;
-        var element = iFrameData.element;
+    populateIFrame: function(src, element){
         element.setAttribute('src', src);
     },
     processNextInQueue: function() {
@@ -82,7 +91,7 @@ NS.queueInlineIFrames = {
             // In this case we have called all elements to load and can complete
             return;
         }
-        this.populateIFrame(iFrameData);
+        this.populateIFrame(iFrameData.src, iFrameData.element);
         // Set up a timeout to continue iterating over the calls
         var queueIframeScope = this;
         window.setTimeout(function(){
@@ -94,7 +103,10 @@ NS.queueInlineIFrames = {
         // Add all inline elements to the queue;
         Y.all('.aspirelists_inline_list').each(function (o) {
             var src = o.getData('intended-src');
-            queueIframeScope.add_to_iframe_load_queue(src, o);
+            if(o.getStyle('display') !== 'none') {
+                // Only queue expanded resources
+                queueIframeScope.add_to_iframe_load_queue(src, o);
+            }
         });
         this.processNextInQueue();
     }
