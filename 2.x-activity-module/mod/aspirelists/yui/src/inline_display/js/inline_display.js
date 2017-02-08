@@ -4,6 +4,8 @@ NS = M.mod_aspirelists.inline_display = {};
 NS.init_view = function(accordionOpen, accordionClosed) {
     Y.delegate('click', this.toggle_inline_list, Y.config.doc, '.aspirelists_inline_readings_toggle .activityinstance a', this);
     Y.on('domready', this.resize_embedded_lists);
+    Y.on('domready', this.ExpandedInlineIFramesLoader.startQueue);
+    Y.on('scroll', this.ExpandedInlineIFramesLoader.loadIfIframeInViewport);
     this.accordionOpen = accordionOpen;
     this.accordionClosed = accordionClosed;
 };
@@ -26,6 +28,11 @@ NS.toggle_inline_list = function(e)
             if(n.getStyle('display') === 'none')
             {
                 n.show();
+                if(n.getAttribute('src') === ''){
+                    // if the iFrame's src has not yet been set then time to set it
+                    var src = n.getData('intended-src');
+                    n.setAttribute('src', src);
+                }
                 NS.toggleAccordionIndicator(n, NS.accordionOpen);
             } else {
                 n.hide();
@@ -33,7 +40,7 @@ NS.toggle_inline_list = function(e)
             }
         });
     }
-}
+};
 
 NS.resize_embedded_lists = function(e)
 {
@@ -56,4 +63,89 @@ NS.resize_embedded_lists = function(e)
 
         o.setAttribute('width', width);
     });
-}
+};
+
+/**
+ * Handle expanded inline iFrames
+ *
+ * startQueue() will queue all Expanded inline iFrames to load sequentially,
+ * each one paced by the inline_display_delay time (milliseconds)
+ *
+ * loadIfIframeInViewport() will detect if a queued-but-not-yet-loaded resource
+ * is currently on screen.  If the user keeps it on screen for the inline_display_delay
+ * time (milliseconds) then the launch will be triggered.  Typically used
+ * as a handler for a scroll event.
+ *
+ * This will ignore any inline iframes which are
+ * currently collapsed.  These will be
+ * loaded when the user interacts with them.
+ *
+ * Call .init() to start the process
+ */
+NS.ExpandedInlineIFramesLoader = (function(){
+    var thisScope;
+    var loader = {
+        iframeQueue: [],
+        inline_display_delay: 1000,
+        viewport_hover_delay: 1000,
+        loadIfIframeInViewport: function(){
+            // A scroll has happened, so check every queued iFrame
+            // to see if it is visible, if so then wait for the value
+            // of viewport_hover_delay, and if the element is still visible
+            // then load it.
+            for (var i = 0; i < thisScope.iframeQueue.length; i++) {
+                var element = thisScope.iframeQueue[i]['element'];
+                if (Y.DOM.inViewportRegion(element.getDOMNode())) {
+                    var src = thisScope.iframeQueue[i]['src'];
+                    window.setTimeout((function (element, src, populateIFrameCallback) {
+                        return function () {
+                            // If we are still looking at this DOM after a wait
+                            // then load it
+                            if (Y.DOM.inViewportRegion(element.getDOMNode())) {
+                                populateIFrameCallback(src, element);
+                            }
+                        }
+                    }(element, src, thisScope.populateIFrame)), thisScope.viewport_hover_delay);
+                }
+            }
+        },
+        startQueue: function() {
+            // Add all inline elements to the queue;
+            Y.all('.aspirelists_inline_list').each(function (o) {
+                var src = o.getData('intended-src');
+                if (o.getStyle('display') !== 'none') {
+                    // Only queue expanded resources
+                    thisScope.addToIframeLoadQueue(src, o);
+                }
+            });
+            thisScope.processNextInQueue();
+        },
+        addToIframeLoadQueue: function (src, element) {
+            this.iframeQueue.push({'src': src, 'element': element});
+        },
+        populateIFrame: function (src, element) {
+            if (element.getAttribute('src') === '') {
+                // if the iFrame's src has not yet been set then set it
+                element.setAttribute('src', src);
+            }
+        },
+        processNextInQueue: function () {
+            // Process the first launch call
+            var iFrameData = thisScope.iframeQueue.shift();
+            if (iFrameData === undefined) {
+                // In this case we have called all elements to load and can complete
+                return;
+            }
+            this.populateIFrame(iFrameData.src, iFrameData.element);
+            // Set up a timeout to continue iterating over the calls
+            window.setTimeout(function () {
+                thisScope.processNextInQueue();
+            }, thisScope.inline_display_delay);
+        },
+        init: function(){
+            thisScope = this;
+        }
+    };
+    loader.init();
+    return loader;
+})();
