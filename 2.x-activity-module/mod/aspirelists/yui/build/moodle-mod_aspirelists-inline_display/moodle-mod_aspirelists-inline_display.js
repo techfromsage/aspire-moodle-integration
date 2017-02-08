@@ -110,7 +110,18 @@ NS.ExpandedInlineIFramesLoader = (function(){
                 }
             }
         },
-        add_to_iframe_load_queue: function (src, element) {
+        startQueue: function() {
+            // Add all inline elements to the queue;
+            Y.all('.aspirelists_inline_list').each(function (o) {
+                var src = o.getData('intended-src');
+                if (o.getStyle('display') !== 'none') {
+                    // Only queue expanded resources
+                    thisScope.addToIframeLoadQueue(src, o);
+                }
+            });
+            thisScope.processNextInQueue();
+        },
+        addToIframeLoadQueue: function (src, element) {
             this.iframeQueue.push({'src': src, 'element': element});
         },
         populateIFrame: function (src, element) {
@@ -131,17 +142,6 @@ NS.ExpandedInlineIFramesLoader = (function(){
             window.setTimeout(function () {
                 thisScope.processNextInQueue();
             }, thisScope.inline_display_delay);
-        },
-        startQueue: function() {
-            // Add all inline elements to the queue;
-            Y.all('.aspirelists_inline_list').each(function (o) {
-                var src = o.getData('intended-src');
-                if (o.getStyle('display') !== 'none') {
-                    // Only queue expanded resources
-                    thisScope.add_to_iframe_load_queue(src, o);
-                }
-            });
-            thisScope.processNextInQueue();
         },
         init: function(){
             thisScope = this;
