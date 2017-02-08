@@ -75,7 +75,8 @@ NS.resize_embedded_lists = function(e)
  *
  * loadIfIframeInViewport() will detect if a queued-but-not-yet-loaded resource
  * is currently on screen.  If the user keeps it on screen for the inline_display_delay
- * time (milliseconds) then the launch will be triggered
+ * time (milliseconds) then the launch will be triggered.  Typically used
+ * as a handler for a scroll event.
  *
  * This will ignore any inline iframes which are
  * currently collapsed.  These will be
