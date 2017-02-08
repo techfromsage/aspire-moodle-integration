@@ -4,7 +4,8 @@ NS = M.mod_aspirelists.inline_display = {};
 NS.init_view = function(accordionOpen, accordionClosed) {
     Y.delegate('click', this.toggle_inline_list, Y.config.doc, '.aspirelists_inline_readings_toggle .activityinstance a', this);
     Y.on('domready', this.resize_embedded_lists);
-    Y.on('domready', this.queueExpandedInlineIFrames.init());
+    Y.on('domready', this.ExpandedInlineIFramesLoader.startQueue);
+    Y.on('scroll', this.ExpandedInlineIFramesLoader.loadIfIframeInViewport);
     this.accordionOpen = accordionOpen;
     this.accordionClosed = accordionClosed;
 };
@@ -65,7 +66,14 @@ NS.resize_embedded_lists = function(e)
 };
 
 /**
- * Queue all expanded inline IFrames
+ * Handle expanded inline iFrames
+ *
+ * startQueue() will queue all Expanded inline iFrames to load sequentially,
+ * each one paced by the inline_display_delay time (milliseconds)
+ *
+ * loadIfIframeInViewport() will detect if a queued-but-not-yet-loaded resource
+ * is currently on screen.  If the user keeps it on screen for the inline_display_delay
+ * time (milliseconds) then the launch will be triggered
  *
  * This will ignore any inline iframes which are
  * currently collapsed.  These will be
@@ -73,39 +81,70 @@ NS.resize_embedded_lists = function(e)
  *
  * Call .init() to start the process
  */
-NS.queueExpandedInlineIFrames = {
-    iframeQueue: [],
-    inline_display_delay: 1000,
-    add_to_iframe_load_queue: function(src, element){
-        this.iframeQueue.push({'src':src, 'element': element});
-    },
-    populateIFrame: function(src, element){
-        element.setAttribute('src', src);
-    },
-    processNextInQueue: function() {
-        // Process the first launch call
-        var iFrameData = this.iframeQueue.shift();
-        if(iFrameData === undefined){
-            // In this case we have called all elements to load and can complete
-            return;
-        }
-        this.populateIFrame(iFrameData.src, iFrameData.element);
-        // Set up a timeout to continue iterating over the calls
-        var queueIframeScope = this;
-        window.setTimeout(function(){
-            queueIframeScope.processNextInQueue();
-        }, this.inline_display_delay);
-    },
-    init: function(){
-        var queueIframeScope = this;
-        // Add all inline elements to the queue;
-        Y.all('.aspirelists_inline_list').each(function (o) {
-            var src = o.getData('intended-src');
-            if(o.getStyle('display') !== 'none') {
-                // Only queue expanded resources
-                queueIframeScope.add_to_iframe_load_queue(src, o);
+NS.ExpandedInlineIFramesLoader = (function(){
+    var thisScope;
+    var loader = {
+        iframeQueue: [],
+        inline_display_delay: 1000,
+        viewport_hover_delay: 1000,
+        loadIfIframeInViewport: function(){
+            // A scroll has happened, so check every queued iFrame
+            // to see if it is visible, if so then wait for the value
+            // of viewport_hover_delay, and if the element is still visible
+            // then load it.
+            for (var i = 0; i < thisScope.iframeQueue.length; i++) {
+                var element = thisScope.iframeQueue[i]['element'];
+                if (Y.DOM.inViewportRegion(element.getDOMNode())) {
+                    var src = thisScope.iframeQueue[i]['src'];
+                    window.setTimeout((function (element, src, populateIFrameCallback) {
+                        return function () {
+                            // If we are still looking at this DOM after a wait
+                            // then load it
+                            if (Y.DOM.inViewportRegion(element.getDOMNode())) {
+                                populateIFrameCallback(src, element);
+                            }
+                        }
+                    }(element, src, thisScope.populateIFrame)), thisScope.viewport_hover_delay);
+                }
             }
-        });
-        this.processNextInQueue();
-    }
-};
+        },
+        add_to_iframe_load_queue: function (src, element) {
+            this.iframeQueue.push({'src': src, 'element': element});
+        },
+        populateIFrame: function (src, element) {
+            if (element.getAttribute('src') === '') {
+                // if the iFrame's src has not yet been set then set it
+                element.setAttribute('src', src);
+            }
+        },
+        processNextInQueue: function () {
+            // Process the first launch call
+            var iFrameData = thisScope.iframeQueue.shift();
+            if (iFrameData === undefined) {
+                // In this case we have called all elements to load and can complete
+                return;
+            }
+            this.populateIFrame(iFrameData.src, iFrameData.element);
+            // Set up a timeout to continue iterating over the calls
+            window.setTimeout(function () {
+                thisScope.processNextInQueue();
+            }, thisScope.inline_display_delay);
+        },
+        startQueue: function() {
+            // Add all inline elements to the queue;
+            Y.all('.aspirelists_inline_list').each(function (o) {
+                var src = o.getData('intended-src');
+                if (o.getStyle('display') !== 'none') {
+                    // Only queue expanded resources
+                    thisScope.add_to_iframe_load_queue(src, o);
+                }
+            });
+            thisScope.processNextInQueue();
+        },
+        init: function(){
+            thisScope = this;
+        }
+    };
+    loader.init();
+    return loader;
+})();
