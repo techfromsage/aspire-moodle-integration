@@ -18,11 +18,13 @@ class mod_aspirelists_renderer extends plugin_renderer_base {
             if(isset($aspirelist->showexpanded) && $aspirelist->showexpanded == '1')
             {
                 $style = "";
+                $srcType = 'src';
             } else {
                 $style = "display: none;";
+                $srcType = 'data-intended-src';
             }
 
-            $output .= $this->output->container('<iframe id="aspirelists_inline_readings_' . $aspirelist->id . '" class="aspirelists_inline_list" width="100%" height="' . $pluginSettings->defaultInlineListHeight . '" src="' . new moodle_url('/mod/aspirelists/launch.php?id='.$aspirelist->cmid) .'" style="' . $style . '"></iframe>');
+            $output .= $this->output->container('<iframe id="aspirelists_inline_readings_' . $aspirelist->id . '" class="aspirelists_inline_list" width="100%" height="' . $pluginSettings->defaultInlineListHeight . '" '.$srcType.'="' . new moodle_url('/mod/aspirelists/launch.php?id='.$aspirelist->cmid) .'" style="' . $style . '"></iframe>');
             return $output;
         }
     }

@@ -25,6 +25,11 @@ NS.toggle_inline_list = function(e)
         {
             if(n.getStyle('display') === 'none')
             {
+                if(n.getAttribute('src') === ''){
+                    // if the iFrame's src has not yet been set then time to set it
+                    var src = n.getData('intended-src');
+                    n.setAttribute('src', src);
+                }
                 n.show();
                 NS.toggleAccordionIndicator(n, NS.accordionOpen);
             } else {

@@ -154,6 +154,16 @@ function aspirelists_add_lti_properties(&$aspirelist)
             }
         }
     }
+    // Custom Attrs to track inline resource usage
+    if(isset($aspirelist->display)){
+        $customLTIParams[] = 'display_inline='.$aspirelist->display;
+    }
+    if(isset($aspirelist->showexpanded)){
+        $customLTIParams[] = 'display_inline_expanded='.$aspirelist->showexpanded;
+    }
+    if(isset($aspirelist->showexpanded)){
+        $customLTIParams[] = 'moodle_lti_plugin_version='.$CFG->version;
+    }
     $aspirelist->instructorcustomparameters= implode("\n", $customLTIParams);
     $aspirelist->debuglaunch = false;
 }
