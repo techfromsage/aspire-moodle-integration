@@ -83,5 +83,8 @@ menu when editing a course.
 
 If you need help with any of the settings here, please contact [support@talis.com](mailto:support@talis.com) with screen shots of the above settings pages.
 
+## Performance tips
 
-
+When using large numbers (greater than 5) inline lti resources on a single course page it is recommended that they do not default to expanded.
+This can lead to high volumes of simultaneous LTI requests, slowing down responses and, on rare occasions, the possibility that some requests
+may not return if too many courses are being loaded by multiple users.
