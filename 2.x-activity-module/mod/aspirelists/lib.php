@@ -161,8 +161,8 @@ function aspirelists_add_lti_properties(&$aspirelist)
     if(isset($aspirelist->showexpanded)){
         $customLTIParams[] = 'display_inline_expanded='.$aspirelist->showexpanded;
     }
-    if(isset($aspirelist->showexpanded)){
-        $plugin = get_config('mod_aspirelists');
+    $plugin = get_config('mod_aspirelists');
+    if(isset($plugin->version)){
         $customLTIParams[] = 'moodle_lti_plugin_version='.$plugin->version;
     }
     $aspirelist->instructorcustomparameters= implode("\n", $customLTIParams);
