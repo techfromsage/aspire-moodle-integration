@@ -156,10 +156,10 @@ function aspirelists_add_lti_properties(&$aspirelist)
     }
     // Custom Attrs to track inline resource usage
     if(isset($aspirelist->display)){
-        $customLTIParams[] = 'display_inline='.$aspirelist->display;
+        $customLTIParams[] = 'display_inline='.(string)$aspirelist->display;
     }
     if(isset($aspirelist->showexpanded)){
-        $customLTIParams[] = 'display_inline_expanded='.$aspirelist->showexpanded;
+        $customLTIParams[] = 'display_inline_expanded='.(string)$aspirelist->showexpanded;
     }
     $plugin = get_config('mod_aspirelists');
     if(isset($plugin->version)){
