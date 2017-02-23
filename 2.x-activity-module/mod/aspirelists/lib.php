@@ -154,6 +154,17 @@ function aspirelists_add_lti_properties(&$aspirelist)
             }
         }
     }
+    // Custom Attrs to track inline resource usage
+    if(isset($aspirelist->display)){
+        $customLTIParams[] = 'display_inline='.(string)$aspirelist->display;
+    }
+    if(isset($aspirelist->showexpanded)){
+        $customLTIParams[] = 'display_inline_expanded='.(string)$aspirelist->showexpanded;
+    }
+    $plugin = get_config('mod_aspirelists');
+    if(isset($plugin->version)){
+        $customLTIParams[] = 'moodle_lti_plugin_version='.$plugin->version;
+    }
     $aspirelist->instructorcustomparameters= implode("\n", $customLTIParams);
     $aspirelist->debuglaunch = false;
 }

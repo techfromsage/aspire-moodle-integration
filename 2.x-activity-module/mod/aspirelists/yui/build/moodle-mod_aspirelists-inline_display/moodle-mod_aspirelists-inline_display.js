@@ -6,6 +6,7 @@ NS = M.mod_aspirelists.inline_display = {};
 NS.init_view = function(accordionOpen, accordionClosed) {
     Y.delegate('click', this.toggle_inline_list, Y.config.doc, '.aspirelists_inline_readings_toggle .activityinstance a', this);
     Y.on('domready', this.resize_embedded_lists);
+    Y.on('resize', this.resize_embedded_lists);
     this.accordionOpen = accordionOpen;
     this.accordionClosed = accordionClosed;
 };
@@ -27,6 +28,11 @@ NS.toggle_inline_list = function(e)
         {
             if(n.getStyle('display') === 'none')
             {
+                if(n.getAttribute('src') === ''){
+                    // if the iFrame's src has not yet been set then time to set it
+                    var src = n.getData('intended-src');
+                    n.setAttribute('src', src);
+                }
                 n.show();
                 NS.toggleAccordionIndicator(n, NS.accordionOpen);
             } else {
@@ -35,7 +41,7 @@ NS.toggle_inline_list = function(e)
             }
         });
     }
-}
+};
 
 NS.resize_embedded_lists = function(e)
 {
@@ -58,7 +64,7 @@ NS.resize_embedded_lists = function(e)
 
         o.setAttribute('width', width);
     });
-}
+};
 
 
 }, '@VERSION@', {"requires": ["base", "node", "event", "event-delegate"]});
