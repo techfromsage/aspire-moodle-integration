@@ -7,6 +7,7 @@ NS.init_view = function(accordionOpen, accordionClosed) {
     Y.delegate('click', this.toggle_inline_list, Y.config.doc, '.aspirelists_inline_readings_toggle .activityinstance a', this);
     Y.on('domready', this.resize_embedded_lists);
     Y.on('resize', this.resize_embedded_lists);
+    Y.on('transitionend', this.resize_embedded_lists);
     this.accordionOpen = accordionOpen;
     this.accordionClosed = accordionClosed;
 };
