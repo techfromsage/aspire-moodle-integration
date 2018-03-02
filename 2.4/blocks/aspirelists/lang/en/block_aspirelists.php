@@ -55,5 +55,9 @@ $string['items'] = 'items';
 // label for use when showing date the list was last updated
 $string['lastUpdated'] = 'last updated';
 
+// Capabilities sgtrings
+$string['aspirelists:myaddinstance'] = 'Add Reading List Block';
+$string['aspirelists:addinstance'] = 'Add Reading List Block';
+
 // added this to prove this was really a UTF-8 FILE!! on a mac 'file filename.txt' reports a UTF-8 file as ASCII if there are NO diacritics in the file!
 $spuriousVar = 'î';
