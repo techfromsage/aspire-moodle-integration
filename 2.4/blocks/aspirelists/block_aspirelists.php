@@ -105,6 +105,7 @@ class block_aspirelists extends block_base {
 		    CURLOPT_HEADER         => false,
 		    CURLOPT_RETURNTRANSFER => true,
 		    CURLOPT_CONNECTTIMEOUT => 20,
+        CURLOPT_TIMEOUT => 20,
 		    CURLOPT_HTTP_VERSION      => CURL_HTTP_VERSION_1_1
 		);
 		curl_setopt_array($ch, $options);
