@@ -8,187 +8,204 @@ class block_aspirelists extends block_base {
   }
 
   function get_content() {
-	global $CFG;
-	global $COURSE;
+    global $CFG;
+    global $COURSE;
 
     if ($this->content !== NULL) {
       return $this->content;
     }
 
-	$site = get_config('aspirelists', 'targetAspire');
-    $httpsAlias = get_config('aspirelists', 'targetAspireAlias');
-
-	if (empty($site))
-	{
-		$this->content->text = get_string('no_base_url_configured', 'block_aspirelists');
-		return $this->content;
-	}
-
-	$targetKG = get_config('aspirelists', 'targetKG');
-	if (empty($targetKG))
-	{
-		$targetKG = "modules"; // default to modules
-	}
-
     $hrefTarget = get_config('aspirelists', 'openNewWindow');
     $target ='_self';
     if($hrefTarget == 1){
-        $target = '_blank';
+      $target = '_blank';
     }
 
     $this->content =  new stdClass;
-	if ($COURSE->idnumber)
-	{
-		// get the code from the global course object
-		$codeGlobal = $COURSE->idnumber;
 
-        $moduleCodeRegEx = '/'.get_config('aspirelists', 'moduleCodeRegex').'/';
-        $timePeriodRegEx = '/'.get_config('aspirelists', 'timePeriodRegex').'/';
+	  if ($COURSE->idnumber)
+	  {
+      $cache = cache::make('block_aspirelists', 'aspirelists');
+      $lists = $cache->get('list-' . $COURSE->idnumber);
 
-        $urlModuleCode = '';
-        $urlTimePeriod = '';
+      if(!$lists) {
+        // get the code from the global course object
+        $lists = $this->getTalisAspireList($COURSE->idnumber);
+        $cache->set('list-' . $COURSE->idnumber, $lists);
+      }
 
-        // decide how to split up the moodle course id.
-        if($moduleCodeRegEx != '//')
+      $output = '';
+
+      foreach ($lists as $list)
+      {
+        $itemNoun = ($list['count'] == 1) ? get_string("item", 'block_aspirelists') : get_string("items", 'block_aspirelists'); // get a friendly, human readable noun for the items
+
+        // finally, we're ready to output information to the browser
+
+        // item count display
+        $itemCountHtml = '';
+        if ($list['count'] > 0) // add the item count if there are any
         {
-            $results = array();
-            if (preg_match($moduleCodeRegEx, $codeGlobal, $results) == 1) // we have a match
-            {
-                $urlModuleCode = strtolower($results[1]); // make sure is lowercase fr URL.
-            }
-            else
-            {
-                // we'll see if something matches anyway?
-                $urlModuleCode = strtolower($codeGlobal);
-            }
+          $itemCountHtml = html_writer::tag('span', " ({$list['count']} {$itemNoun})" ,array('class'=>'aspirelists-item-count'));
         }
-        if( $timePeriodRegEx != '//')
+
+        // last update display
+        $lastUpdatedHtml = '';
+        if (isset($list["lastUpdatedDate"]))
         {
-            $results = array();
-            if (preg_match($timePeriodRegEx, $codeGlobal, $results) == 1) // we have a match
-            {
-                $mapping = json_decode(get_config('aspirelists', 'timePeriodMapping'),true);
-                if($mapping != null)
-                {
-                    $urlTimePeriod = strtolower($mapping[$results[1]]); // make sure is lowercase for URL.
-                }
-                else
-                {
-                    // there is no mapping so just use the result
-                    $urlTimePeriod = strtolower($results[1]);
-                }
-            }
+          $lastUpdatedHtml = html_writer::tag('span',', '.get_string('lastUpdated','block_aspirelists').' '.$this->contextualTime(strtotime($list["lastUpdatedDate"])) , array('class'=>'aspirelists-last-updated'));
         }
 
-        // build the target URL of the JSON data we'll be requesting from Aspire
+        // put it all together
+        $output .= html_writer::tag('p',
+          html_writer::tag('a', $list['name'] , array('href' => $list['url'], 'target' => $target)) . html_writer::empty_tag('br') . $itemCountHtml . $lastUpdatedHtml );
+      }
 
-        if(!empty($httpsAlias))
-        {
-            $baseUrl = $httpsAlias;
-        }
-        else
-        {
-            $baseUrl = $site;
-        }
-
-        if($urlTimePeriod != ''){
-            $url = "{$baseUrl}/{$targetKG}/{$urlModuleCode}/lists/{$urlTimePeriod}.json";
-        }
-        else
-        {
-            $url = "{$baseUrl}/{$targetKG}/{$urlModuleCode}/lists.json";
-        }
-		// using php curl, we'll now request the JSON data from Aspire
-		$ch = curl_init();
-		$options = array(
-		    CURLOPT_URL            => $url, // tell curl the URL
-		    CURLOPT_HEADER         => false,
-		    CURLOPT_RETURNTRANSFER => true,
-		    CURLOPT_CONNECTTIMEOUT => 20,
-        CURLOPT_TIMEOUT => 20,
-		    CURLOPT_HTTP_VERSION      => CURL_HTTP_VERSION_1_1
-		);
-		curl_setopt_array($ch, $options);
-		$response = curl_exec($ch); // execute the request and get a response
-
-		$output = '';
-		if ($response) // if we get a valid response from curl...
-		{
-			$data = json_decode($response,true); // decode the returned JSON data
-            // JSON data will be using the non https alias.
-			if(isset($data["$site/$targetKG/$urlModuleCode"]) && isset($data["$site/$targetKG/$urlModuleCode"]['http://purl.org/vocab/resourcelist/schema#usesList'])) // if there are any lists...
-			{
-				$lists = array();
-				foreach ($data["$site/$targetKG/$urlModuleCode"]['http://purl.org/vocab/resourcelist/schema#usesList'] as $usesList) // for each list this module uses...
-				{
-					$list = array();
-					$list["url"] = clean_param($usesList["value"], PARAM_URL); // extract the list URL
-					$list["name"] = clean_param($data[$list["url"]]['http://rdfs.org/sioc/spec/name'][0]['value'], PARAM_TEXT); // extract the list name
-
-					// let's try and get a last updated date
-					if (isset($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#lastUpdated'])) // if there is a last updated date...
-					{
-						// set up the timezone 
-						date_default_timezone_set('Europe/London');
-
-						// ..and extract the date in a friendly, human readable format...
-						$list['lastUpdatedDate'] = date('l j F Y',
-						    strtotime(clean_param($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#lastUpdated'][0]['value'], PARAM_TEXT)));
-					}
-
-					// now let's count the number of items
-					$itemCount = 0; 
-					if (isset($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#contains'])) // if the list contains anything...
-					{
-						foreach ($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#contains'] as $things) // loop through the list of things the list contains...
-						{
-							if (preg_match('/\/items\//',clean_param($things['value'], PARAM_URL))) // if the thing is an item, increment the item count (lists can contain sections, too)
-							{
-								$itemCount++; 
-							}
-						}
-					}
-					$list['count'] = $itemCount;
-					array_push($lists,$list);
-				}
-				usort($lists,array($this,'sortByName'));
-				foreach ($lists as $list)
-				{
-					$itemNoun = ($list['count'] == 1) ? get_string("item", 'block_aspirelists') : get_string("items", 'block_aspirelists'); // get a friendly, human readable noun for the items
-
-					// finally, we're ready to output information to the browser
-
-                    // item count display
-                    $itemCountHtml = '';
-                    if ($list['count'] > 0) // add the item count if there are any
-                    {
-                        $itemCountHtml = html_writer::tag('span', " ({$list['count']} {$itemNoun})" ,array('class'=>'aspirelists-item-count'));
-                    }
-
-                    // last update display
-                    $lastUpdatedHtml = '';
-                    if (isset($list["lastUpdatedDate"]))
-                    {
-                        $lastUpdatedHtml = html_writer::tag('span',', '.get_string('lastUpdated','block_aspirelists').' '.$this->contextualTime(strtotime($list["lastUpdatedDate"])) , array('class'=>'aspirelists-last-updated'));
-                    }
-
-                    // put it all together
-                    $output .= html_writer::tag('p',
-                        html_writer::tag('a', $list['name'] , array('href' => $list['url'], 'target' => $target)) . html_writer::empty_tag('br') . $itemCountHtml . $lastUpdatedHtml );
-				}
-			}
-		}
-		if ($output=='')
-		{
-		    $this->content->text   = html_writer::tag('p', get_config('aspirelists', 'noResourceListsMessage'));
-		}
-		else
-		{
-		    $this->content->text   = $output;
-		}
-	}
+      if ($output=='')
+      {
+          $this->content->text   = html_writer::tag('p', get_config('aspirelists', 'noResourceListsMessage'));
+      }
+      else
+      {
+          $this->content->text   = $output;
+      }
+	  }
 
     return $this->content;
+  }
+
+  private function getTalisAspireList($codeGlobal)
+  {
+    $site = get_config('aspirelists', 'targetAspire');
+    $httpsAlias = get_config('aspirelists', 'targetAspireAlias');
+
+    if (empty($site))
+    {
+      $this->content->text = get_string('no_base_url_configured', 'block_aspirelists');
+      return $this->content;
+    }
+
+    $targetKG = get_config('aspirelists', 'targetKG');
+    if (empty($targetKG))
+    {
+      $targetKG = "modules"; // default to modules
+    }
+
+    $moduleCodeRegEx = '/'.get_config('aspirelists', 'moduleCodeRegex').'/';
+    $timePeriodRegEx = '/'.get_config('aspirelists', 'timePeriodRegex').'/';
+
+    $urlModuleCode = '';
+    $urlTimePeriod = '';
+
+    // decide how to split up the moodle course id.
+    if($moduleCodeRegEx != '//')
+    {
+      $results = array();
+      if (preg_match($moduleCodeRegEx, $codeGlobal, $results) == 1) // we have a match
+      {
+        $urlModuleCode = strtolower($results[1]); // make sure is lowercase fr URL.
+      }
+      else
+      {
+        // we'll see if something matches anyway?
+        $urlModuleCode = strtolower($codeGlobal);
+      }
+    }
+
+    if( $timePeriodRegEx != '//')
+    {
+      $results = array();
+      if (preg_match($timePeriodRegEx, $codeGlobal, $results) == 1) // we have a match
+      {
+        $mapping = json_decode(get_config('aspirelists', 'timePeriodMapping'),true);
+        if($mapping != null)
+        {
+          $urlTimePeriod = strtolower($mapping[$results[1]]); // make sure is lowercase for URL.
+        }
+        else
+        {
+          // there is no mapping so just use the result
+          $urlTimePeriod = strtolower($results[1]);
+        }
+      }
+    }
+
+    // build the target URL of the JSON data we'll be requesting from Aspire
+    if(!empty($httpsAlias))
+    {
+      $baseUrl = $httpsAlias;
+    }
+    else
+    {
+      $baseUrl = $site;
+    }
+
+    if($urlTimePeriod != ''){
+      $url = "{$baseUrl}/{$targetKG}/{$urlModuleCode}/lists/{$urlTimePeriod}.json";
+    }
+    else
+    {
+      $url = "{$baseUrl}/{$targetKG}/{$urlModuleCode}/lists.json";
+    }
+
+    // using php curl, we'll now request the JSON data from Aspire
+    $ch = curl_init();
+    $options = array(
+      CURLOPT_URL            => $url, // tell curl the URL
+      CURLOPT_HEADER         => false,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_CONNECTTIMEOUT => 20,
+      CURLOPT_TIMEOUT => 20,
+      CURLOPT_HTTP_VERSION      => CURL_HTTP_VERSION_1_1
+    );
+    curl_setopt_array($ch, $options);
+    $response = curl_exec($ch); // execute the request and get a response
+
+    $output = '';
+    $lists = array();
+    if ($response) // if we get a valid response from curl...
+    {
+      $data = json_decode($response,true); // decode the returned JSON data
+      // JSON data will be using the non https alias.
+      if(isset($data["$site/$targetKG/$urlModuleCode"]) && isset($data["$site/$targetKG/$urlModuleCode"]['http://purl.org/vocab/resourcelist/schema#usesList'])) // if there are any lists...
+      {
+        foreach ($data["$site/$targetKG/$urlModuleCode"]['http://purl.org/vocab/resourcelist/schema#usesList'] as $usesList) // for each list this module uses...
+        {
+          $list = array();
+          $list["url"] = clean_param($usesList["value"], PARAM_URL); // extract the list URL
+          $list["name"] = clean_param($data[$list["url"]]['http://rdfs.org/sioc/spec/name'][0]['value'], PARAM_TEXT); // extract the list name
+
+          // let's try and get a last updated date
+          if (isset($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#lastUpdated'])) // if there is a last updated date...
+          {
+            // set up the timezone
+            date_default_timezone_set('Europe/London');
+
+            // ..and extract the date in a friendly, human readable format...
+            $list['lastUpdatedDate'] = date('l j F Y',
+              strtotime(clean_param($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#lastUpdated'][0]['value'], PARAM_TEXT)));
+          }
+
+          // now let's count the number of items
+          $itemCount = 0;
+          if (isset($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#contains'])) // if the list contains anything...
+          {
+            foreach ($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#contains'] as $things) // loop through the list of things the list contains...
+            {
+              if (preg_match('/\/items\//',clean_param($things['value'], PARAM_URL))) // if the thing is an item, increment the item count (lists can contain sections, too)
+              {
+                $itemCount++;
+              }
+            }
+          }
+          $list['count'] = $itemCount;
+          array_push($lists,$list);
+        }
+        usort($lists,array($this,'sortByName'));
+      }
+    }
+
+    return $lists;
   }
 
   function has_config() {
