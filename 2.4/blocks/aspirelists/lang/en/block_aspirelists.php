@@ -61,3 +61,5 @@ $string['aspirelists:addinstance'] = 'Add Reading List Block';
 
 // added this to prove this was really a UTF-8 FILE!! on a mac 'file filename.txt' reports a UTF-8 file as ASCII if there are NO diacritics in the file!
 $spuriousVar = 'î';
+
+$string['privacy:metadata'] = 'The block holds no data and only displays reading list information retrieved from Talis Aspire.';
