@@ -131,4 +131,8 @@ function xmldb_aspirelists_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2017070400, 'aspirelists');
     }
 
+    if ($oldversion < 201805291000){
+        upgrade_mod_savepoint(true, 201805291000, 'aspirelists');
+    }
+
 }

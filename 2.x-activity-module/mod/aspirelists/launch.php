@@ -18,6 +18,11 @@ $list = $DB->get_record('aspirelists', array('id' => $cm->instance), '*', MUST_E
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 $context = context_module::instance($cm->id);
 
+if($CFG->version >= 2017111300) {
+    $PAGE->set_cm($cm, $course); // set up global $COURSE
+}
+
+// Log the launch
 if($CFG->version < 2014051200) {
     add_to_log($course->id, "aspirelists", "launch", "launch.php?id=$cm->id", "$list->id");
 } else {
@@ -32,6 +37,7 @@ if($CFG->version < 2014051200) {
     $event->trigger();
 }
 
+// Perform the launch
 $list->cmid = $cm->id;
 aspirelists_add_lti_properties($list);
 if($CFG->version >= 2015111600) {
