@@ -41,3 +41,15 @@ To determine what version of this block you are using,
 ## 1.x
 
 This directory contains a module which is no longer actively developed and was last tested for the 1.x versions of Moodle.
+
+# Contributing changes and reporting issues
+
+Without your feedback and input, these plugins would not be where they are today. If you have an idea for an improvement, or have made a change in a local copy of the plugin, then please do contribute.
+
+## Guidelines for contributing
+
+1. Raise an issue first — this means that a disucssion can be had about the change
+1. Fork this repo
+1. Make changes in a new branch.
+1. Raise a Pull Request against this repo with those changes, and reference the issue from step 1
+1. Once a review of the changes has been completed, we'll merge the changes into the master branch.
