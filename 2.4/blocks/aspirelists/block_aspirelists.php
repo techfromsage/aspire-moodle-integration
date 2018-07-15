@@ -3,6 +3,9 @@
 // Released under the LGPL Licence - http://www.gnu.org/licenses/lgpl.html. Anyone is free to change or redistribute this code.
 
 class block_aspirelists extends block_base {
+
+    const CACHEPREFIX = "list-";
+
     function init() {
         $this->title     = get_config('aspirelists', 'blockTitle');
     }
@@ -26,12 +29,12 @@ class block_aspirelists extends block_base {
         if ($COURSE->idnumber)
         {
             $cache = cache::make('block_aspirelists', 'aspirelists');
-            $lists = $cache->get('list-' . $COURSE->idnumber);
+            $lists = $cache->get(block_aspirelists::CACHEPREFIX . $COURSE->idnumber);
 
             if(!$lists) {
                 // get the code from the global course object
                 $lists = $this->getTalisAspireList($COURSE->idnumber);
-                $cache->set('list-' . $COURSE->idnumber, $lists);
+                $cache->set(block_aspirelists::CACHEPREFIX . $COURSE->idnumber, $lists);
             }
 
             $output = '';
