@@ -24,18 +24,28 @@ class block_aspirelists extends block_base {
             $target = '_blank';
         }
 
-        $this->content = new stdClass;
+	$this->content = new stdClass;
+
+	$cachingEnabled = get_config('aspirelists', 'caching');
 
         if ($COURSE->idnumber)
-        {
-            $cache = cache::make('block_aspirelists', 'aspirelists');
-            $lists = $cache->get(block_aspirelists::CACHEPREFIX . $COURSE->idnumber);
+	{
+	    if($cachingEnabled) 
+	    {
+                $cache = cache::make('block_aspirelists', 'aspirelists');
+                $lists = $cache->get(block_aspirelists::CACHEPREFIX . $COURSE->idnumber);
 
-            if(!$lists) {
-                // get the code from the global course object
+                if(!$lists) {
+                  // get the code from the global course object
+                  $lists = $this->getTalisAspireList($COURSE->idnumber);
+                  $cache->set(block_aspirelists::CACHEPREFIX . $COURSE->idnumber, $lists);
+	        }
+	    }
+	    else
+	    {
                 $lists = $this->getTalisAspireList($COURSE->idnumber);
-                $cache->set(block_aspirelists::CACHEPREFIX . $COURSE->idnumber, $lists);
-            }
+	    }	    
+
 
             $output = '';
 

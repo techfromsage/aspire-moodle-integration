@@ -28,3 +28,5 @@
     $settings->add(new admin_setting_configtext('aspirelists/blockTitle',get_string('config_AspireBlockTitle', 'block_aspirelists'),get_string('config_AspireBlockTitle_desc', 'block_aspirelists'), get_string('aspirelists', 'block_aspirelists') ));
 
     $settings->add(new admin_setting_configtext('aspirelists/noResourceListsMessage',get_string('config_noResourceListsMessage', 'block_aspirelists'),get_string('config_noResourceListsMessage_desc', 'block_aspirelists'), get_string('no_resource_lists_msg', 'block_aspirelists') ));
+
+    $settings->add(new admin_setting_configcheckbox('aspirelists/caching', get_string('config_caching', 'block_aspirelists'), get_string('config_caching_desc', 'block_aspirelists'), 0));

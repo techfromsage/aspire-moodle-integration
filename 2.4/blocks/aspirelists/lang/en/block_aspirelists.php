@@ -42,6 +42,9 @@ $string['config_AspireBlockTitle_desc'] = 'The title of the block as it appears 
 $string['config_noResourceListsMessage'] = 'Message: no lists available';
 $string['config_noResourceListsMessage_desc'] = 'The text of the message to display when there are no lists available.';
 
+$string['config_caching'] = 'List caching';
+$string['config_caching_desc'] = 'Enables the caching of list data from Talis Aspire to improve performance.';
+
 $string['modules'] = 'Modules';
 $string['courses'] = 'Courses';
 $string['units'] = 'Units';
