@@ -7,7 +7,7 @@ class block_aspirelists extends block_base {
     const CACHEPREFIX = "list-";
 
     function init() {
-        $this->title     = get_config('aspirelists', 'blockTitle');
+        $this->title = get_config('aspirelists', 'blockTitle');
     }
 
     function get_content() {
@@ -24,7 +24,7 @@ class block_aspirelists extends block_base {
             $target = '_blank';
         }
 
-        $this->content =    new stdClass;
+        $this->content = new stdClass;
 
         if ($COURSE->idnumber)
         {
@@ -66,11 +66,11 @@ class block_aspirelists extends block_base {
 
             if ($output=='')
             {
-                    $this->content->text     = html_writer::tag('p', get_config('aspirelists', 'noResourceListsMessage'));
+                    $this->content->text = html_writer::tag('p', get_config('aspirelists', 'noResourceListsMessage'));
             }
             else
             {
-                    $this->content->text     = $output;
+                    $this->content->text = $output;
             }
         }
 
@@ -154,12 +154,12 @@ class block_aspirelists extends block_base {
         // using php curl, we'll now request the JSON data from Aspire
         $ch = curl_init();
         $options = array(
-            CURLOPT_URL                      => $url, // tell curl the URL
-            CURLOPT_HEADER               => false,
+            CURLOPT_URL => $url, // tell curl the URL
+            CURLOPT_HEADER => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CONNECTTIMEOUT => 20,
             CURLOPT_TIMEOUT => 20,
-            CURLOPT_HTTP_VERSION            => CURL_HTTP_VERSION_1_1
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1
         );
         curl_setopt_array($ch, $options);
         $response = curl_exec($ch); // execute the request and get a response
