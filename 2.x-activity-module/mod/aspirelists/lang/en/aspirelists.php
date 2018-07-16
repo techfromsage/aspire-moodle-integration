@@ -3,6 +3,9 @@
 // Released under the LGPL Licence - http://www.gnu.org/licenses/lgpl.html. Anyone is free to change or redistribute this code.
 
 $string['modulename'] = 'Course Resource List';
+$string['modulename_help'] = 'The resource list allows lists or sections of lists to be embedded within a Moodle course.  Displaying lists in-line can be useful for including reading material alongside other course resources.  As sections of lists can be displayed it is possible to break down resources and reading material on a per-week or per-topic basis.
+
+You may be asked to choose which resource list relates to this Moodle course.';
 $string['pluginname'] = 'Course Resource List';
 
 $string['eventAspireLaunch'] = 'Talis Aspire Launch Event';

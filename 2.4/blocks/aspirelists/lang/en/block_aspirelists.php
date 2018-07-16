@@ -67,3 +67,4 @@ $spuriousVar = 'î';
 
 $string['cachedef_aspirelists'] = 'Talis Aspire reading lists';
 $string['expirelisttask'] = 'Expire Talis Aspire list cache';
+$string['privacy:metadata'] = 'The block holds no data and only displays reading list information retrieved from Talis Aspire.';
