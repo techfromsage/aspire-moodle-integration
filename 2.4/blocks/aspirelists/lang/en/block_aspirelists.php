@@ -42,6 +42,9 @@ $string['config_AspireBlockTitle_desc'] = 'The title of the block as it appears 
 $string['config_noResourceListsMessage'] = 'Message: no lists available';
 $string['config_noResourceListsMessage_desc'] = 'The text of the message to display when there are no lists available.';
 
+$string['config_caching'] = 'List caching';
+$string['config_caching_desc'] = 'Enables the caching of list data from Talis Aspire to improve performance.';
+
 $string['modules'] = 'Modules';
 $string['courses'] = 'Courses';
 $string['units'] = 'Units';
@@ -62,4 +65,6 @@ $string['aspirelists:addinstance'] = 'Add Reading List Block';
 // added this to prove this was really a UTF-8 FILE!! on a mac 'file filename.txt' reports a UTF-8 file as ASCII if there are NO diacritics in the file!
 $spuriousVar = 'î';
 
+$string['cachedef_aspirelists'] = 'Talis Aspire reading lists';
+$string['expirelisttask'] = 'Expire Talis Aspire list cache';
 $string['privacy:metadata'] = 'The block holds no data and only displays reading list information retrieved from Talis Aspire.';
