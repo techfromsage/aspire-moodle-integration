@@ -1,5 +1,5 @@
 M.mod_aspirelists = M.mod_aspirelists || {};
-NS = M.mod_aspirelists.inline_display = {};
+var NS = M.mod_aspirelists.inline_display = {};
 
 NS.init_view = function(accordionOpen, accordionClosed) {
     Y.delegate('click', this.toggle_inline_list, Y.config.doc, '.aspirelists_inline_readings_toggle .activityinstance a', this);
@@ -42,7 +42,7 @@ NS.toggle_inline_list = function(e)
     }
 };
 
-NS.resize_embedded_lists = function(e)
+NS.resize_embedded_lists = function()
 {
     Y.all('.aspirelists_inline_list').each(function(o){
         var width = o.ancestor('.aspirelists').get("offsetWidth");
