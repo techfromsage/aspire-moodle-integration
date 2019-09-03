@@ -1,17 +1,14 @@
 <?php
 function xmldb_aspirelists_upgrade($oldversion) {
-    global $CFG, $DB;
+    global $DB;
 
     $dbman = $DB->get_manager();
 
-    if($oldversion < 2014040701)
+    if ($oldversion < 2014040701)
     {
         upgrade_mod_savepoint(true, 2014040701, 'aspirelists');
     }
-    if($oldversion < 2014041701)
-    {
-        upgrade_mod_savepoint(true, 2014041701, 'aspirelists');
-    }
+
     if ($oldversion < 2014041702) {
 
         // Define table aspirelists to be created.
@@ -134,5 +131,4 @@ function xmldb_aspirelists_upgrade($oldversion) {
     if ($oldversion < 201805291000){
         upgrade_mod_savepoint(true, 201805291000, 'aspirelists');
     }
-
 }

@@ -1,73 +1,64 @@
 language: php
 
-sudo: false
+sudo: true
+
+addons:
+  firefox: "47.0.1"
+  postgresql: "9.4"
+  apt:
+    packages:
+      - openjdk-8-jre-headless
+
+services:
+  - mysql
 
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/.npm
 
 matrix:
   fast_finish: true
   include:
     - php: 5.6
-      env: MOODLE_BRANCH=MOODLE_31_STABLE DB=pgsql
-    - php: 5.6
-      env: MOODLE_BRANCH=MOODLE_31_STABLE DB=mysqli
-    - php: 5.6
       env: MOODLE_BRANCH=MOODLE_33_STABLE DB=pgsql
-      addons:
-        postgresql: "9.3"
     - php: 5.6
       env: MOODLE_BRANCH=MOODLE_33_STABLE DB=mysqli
-
     - php: 7.1
       env: MOODLE_BRANCH=MOODLE_33_STABLE DB=pgsql
-      addons:
-        postgresql: "9.3"
     - php: 7.1
       env: MOODLE_BRANCH=MOODLE_33_STABLE DB=mysqli
     - php: 7.1
       env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
-      addons:
-        postgresql: "9.3"
     - php: 7.1
       env: MOODLE_BRANCH=MOODLE_34_STABLE DB=mysqli
     - php: 7.1
       env: MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
-      addons:
-        postgresql: "9.3"
     - php: 7.1
       env: MOODLE_BRANCH=MOODLE_35_STABLE DB=mysqli
     - php: 7.1
       env: MOODLE_BRANCH=MOODLE_36_STABLE DB=pgsql
-      addons:
-        postgresql: "9.4"
     - php: 7.1
       env: MOODLE_BRANCH=MOODLE_36_STABLE DB=mysqli
-
     - php: 7.2
       env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
-      addons:
-        postgresql: "9.3"
     - php: 7.2
       env: MOODLE_BRANCH=MOODLE_34_STABLE DB=mysqli
     - php: 7.2
       env: MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
-      addons:
-        postgresql: "9.3"
     - php: 7.2
       env: MOODLE_BRANCH=MOODLE_35_STABLE DB=mysqli
     - php: 7.2
       env: MOODLE_BRANCH=MOODLE_36_STABLE DB=pgsql
-      addons:
-        postgresql: "9.4"
     - php: 7.2
       env: MOODLE_BRANCH=MOODLE_36_STABLE DB=mysqli
 
 before_install:
   - phpenv config-rm xdebug.ini
-  - composer selfupdate
-  - composer create-project -n --no-dev --prefer-dist blackboard-open-source/moodle-plugin-ci ci ^1
+  - nvm install 8.9
+  - nvm use 8.9
+  - cd ../..
+  - composer create-project -n --no-dev --prefer-dist blackboard-open-source/moodle-plugin-ci ci ^2
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
@@ -75,13 +66,12 @@ install:
   - moodle-plugin-ci install
 
 script:
+  - moodle-plugin-ci grunt
+  - moodle-plugin-ci savepoints # check plugin upgrade steps
   - moodle-plugin-ci phplint
   - moodle-plugin-ci phpcpd
   - moodle-plugin-ci phpmd
   #- moodle-plugin-ci codechecker
-  - moodle-plugin-ci csslint
-  - moodle-plugin-ci shifter
-  #- moodle-plugin-ci jshint
   - moodle-plugin-ci validate
   - moodle-plugin-ci phpunit
-  #- moodle-plugin-ci behat
+  #- moodle-plugin-ci behat 
