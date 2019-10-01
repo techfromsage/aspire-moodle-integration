@@ -9,6 +9,8 @@ use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
 use mod_assign\privacy\useridlist;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * This plugin does not store any personal user data in the database, but does cause LTI connections to be made.
  */
