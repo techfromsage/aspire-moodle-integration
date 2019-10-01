@@ -13,7 +13,7 @@ Feel free to submit Pull Requests too!
 Installation
 ------------
 
-Copy the 2.x-activity-module/mod/aspirelists directory to your {MoodleRoot}/mod directory.
+Copy the moodle-activity-module-lti-wrapper/mod/aspirelists directory to your {MoodleRoot}/mod directory.
 
 Log in to Moodle as an administrator and you should be prompted to upgrade mod_aspirelists.
 
