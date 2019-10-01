@@ -2,7 +2,7 @@
 
 This software provides a "block" for Moodle that can be added to the course page in Moodle. The block will display available reading lists in Talis Aspire for that course.
 
-If you are looking for the Moodle Activity Module for Talis Reading Lists, you should [look here...](https://github.com/talis/aspire-moodle-integration/tree/master/2.x-activity-module/mod/aspirelists)
+If you are looking for the Moodle Activity Module for Talis Reading Lists, you should [look here...](https://github.com/talis/aspire-moodle-integration/tree/master/moodle-activity-module-lti-wrapper/mod/aspirelists)
 
 ## Benefits
 
@@ -24,7 +24,6 @@ There is no warranty, either expressed or implied, covering the use or installat
 ## Pre-requisites
 
 A running Moodle instance. This block has been tested against Moodle 2.4.x, 2.5.x and v2.6.x It has not been tested against any other version.
-The 1.x version of the Moodle Block code resides in this repository, but is no longer maintained. No version 1.x code is included in the version 2.4 tar file.
 
 Our test environment was the Bitnami Moodle Stack (http://bitnami.org/stack/moodle) running in a local virtual machine.
 
@@ -41,11 +40,11 @@ The commands shown here are those used on a unix based system, they also contain
 
 3. Download the file aspire-moodle-integration.tar to this directory:
 
-        wget https://github.com/talis/aspire-moodle-integration/raw/master/2.4/aspire-moodle2.4-integration.tar
+        wget https://github.com/talis/aspire-moodle-integration/raw/master/moodle-block-plugin/aspire-moodle2.4-integration.tar
 
 4. Extract the archive:
 
-        tar -xvf aspire-moodle-integration.tar 
+        tar -xvf aspire-moodle2.4-integration.tar 
 
 5. Log into Moodle as an administrator, and navigate to the Notifications screen
 

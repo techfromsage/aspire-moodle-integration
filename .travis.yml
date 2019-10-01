@@ -66,7 +66,7 @@ before_install:
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
-  - export TRAVIS_BUILD_DIR="/home/travis/build/talis/aspire-moodle-integration/2.x-activity-module/mod/aspirelists"
+  - export TRAVIS_BUILD_DIR="/home/travis/build/talis/aspire-moodle-integration/moodle-activity-module-lti-wrapper/mod/aspirelists"
   - moodle-plugin-ci install
 
 script:
