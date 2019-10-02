@@ -21,7 +21,7 @@
  */
 
 use core_privacy\local\metadata\collection;
-use aspirelists\privacy\provider;
+use mod_aspirelists\privacy\provider;
 
 defined('MOODLE_INTERNAL') || die();
 
