@@ -27,7 +27,7 @@ class provider implements
     }
 
     /**
-     * Get a list of the metadata used
+     * Get a list of the metadata used by this plugin
      *
      * @param collection $collection
      *
@@ -47,7 +47,6 @@ class provider implements
         return $collection;
     }
 
-
     /**
      * Get the list of contexts that contain user information for the specified user.
      *
@@ -57,7 +56,7 @@ class provider implements
      */
     public static function get_contexts_for_userid(int $userid): contextlist
     {
-        // Not required as mod_lti will handle this
+        // This plugin does not directly handle user data in moodle
     }
 
     /**
@@ -67,7 +66,7 @@ class provider implements
      */
     public static function export_user_data(approved_contextlist $contextlist)
     {
-        // Not required as mod_lti will handle this
+        // This plugin does not directly handle user data in moodle
     }
 
     /**
@@ -77,7 +76,7 @@ class provider implements
      */
     public static function delete_data_for_all_users_in_context(\context $context)
     {
-        // Not required as mod_lti will handle this
+        // This plugin does not directly handle user data in moodle
     }
 
     /**
@@ -87,7 +86,7 @@ class provider implements
      */
     public static function delete_data_for_user(approved_contextlist $contextlist)
     {
-        // Not required as mod_lti will handle this
+        // This plugin does not directly handle user data in moodle
     }
 
     /**
@@ -97,7 +96,7 @@ class provider implements
      */
     public static function get_users_in_context(userlist $userlist)
     {
-        // Not required as mod_lti will handle this
+        // This plugin does not directly handle user data in moodle
     }
 
     /**
@@ -107,6 +106,6 @@ class provider implements
      */
     public static function delete_data_for_users(approved_userlist $userlist)
     {
-        // Not required as mod_lti will handle this
+        // This plugin does not directly handle user data in moodle
     }
 }
