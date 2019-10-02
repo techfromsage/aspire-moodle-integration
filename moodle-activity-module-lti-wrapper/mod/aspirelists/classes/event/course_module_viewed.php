@@ -1,5 +1,5 @@
 <?php
-namespace aspirelists\event;
+namespace mod_aspirelists\event;
 defined('MOODLE_INTERNAL' || die);
 
 /**
