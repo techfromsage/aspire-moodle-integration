@@ -85,7 +85,7 @@ $string['config_defaultInlineListHeight_desc'] = 'The default height of an inlin
 $string['config_defaultInlineListHeight_default'] = '400px' ;
 
 $string['privacy:metadata:reason'] = 'The Aspire Lists LTI Wrapper does not store any user data in Moodle, but some user data is passed via LTI.';
-$string['privacy:metadata:lti_client'] = 'In order to integrate with a remote Talis Aspire LTI Tool Provider, user data needs to be exchanged with Talis Aspire.';
+$string['privacy:metadata:lti_client'] = 'In order to integrate with a remote Talis Aspire LTI Tool Provider, user data needs to be exchanged with Talis Aspire. No user data is stored in Moodle by this plugin';
 $string['privacy:metadata:lti_client:userid'] = 'The userid is sent from Moodle to allow you to access your data in Talis Aspire.';
 $string['privacy:metadata:lti_client:role'] = 'The role is sent from Moodle to allow you to have the right experience in Talis Aspire.';
 $string['privacy:metadata:lti_client:courseid'] = 'The courseid is sent from Moodle to allow you to find the right list in Talis Aspire.';
