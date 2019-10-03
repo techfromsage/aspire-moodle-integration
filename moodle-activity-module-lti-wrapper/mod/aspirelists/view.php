@@ -91,7 +91,7 @@ require_login($course);
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
 
-$event = \aspirelists\event\course_module_viewed::create(
+$event = \mod_aspirelists\event\course_module_viewed::create(
     array(
         'objectid' => $PAGE->cm->instance,
         'context'  => $context,

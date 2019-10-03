@@ -26,7 +26,7 @@ if($CFG->version >= 2017111300) {
 if($CFG->version < 2014051200) {
     add_to_log($course->id, "aspirelists", "launch", "launch.php?id=$cm->id", "$list->id");
 } else {
-    $event = \aspirelists\event\aspire_lists_launch::create(
+    $event = \mod_aspirelists\event\aspire_lists_launch::create(
         array(
             'objectid' => $cm->instance,
             'context' => $context,
