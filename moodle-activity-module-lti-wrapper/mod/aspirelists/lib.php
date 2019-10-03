@@ -177,7 +177,7 @@ function aspirelists_cm_info_view(cm_info $cm) {
     global $CFG,$PAGE;
     if ($cm->uservisible && $cm->customdata) {
         // Restore folder object from customdata.
-        // Note the field 'customdata' is not empty IF AND ONLY IF we display contens inline.
+        // Note the field 'customdata' is not empty IF AND ONLY IF we display contents inline.
         // Otherwise the content is default.
         $aspirelist = $cm->customdata;
         $aspirelist->id = (int)$cm->instance;
@@ -194,7 +194,7 @@ function aspirelists_cm_info_view(cm_info $cm) {
         $aspirelist->showdescription = $cm->showdescription;
         // display reading list
         $renderer = $PAGE->get_renderer('mod_aspirelists');
-        $cm->set_content($renderer->display_aspirelists($aspirelist));
+        $cm->set_content($renderer->display_aspirelists($aspirelist), true);
     }
 }
 
