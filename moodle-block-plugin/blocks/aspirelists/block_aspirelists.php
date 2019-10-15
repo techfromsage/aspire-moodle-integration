@@ -7,7 +7,7 @@ class block_aspirelists extends block_base {
     const CACHEPREFIX = "list-";
 
     function init() {
-        $this->title = get_config('aspirelists', 'blockTitle');
+        $this->title = \get_config('aspirelists', 'blockTitle');
     }
 
     function get_content() {
@@ -18,7 +18,7 @@ class block_aspirelists extends block_base {
             return $this->content;
         }
 
-        $hrefTarget = get_config('aspirelists', 'openNewWindow');
+        $hrefTarget = \get_config('aspirelists', 'openNewWindow');
         $target ='_self';
         if($hrefTarget == 1){
             $target = '_blank';
@@ -26,13 +26,13 @@ class block_aspirelists extends block_base {
 
 	$this->content = new stdClass;
 
-	$cachingEnabled = get_config('aspirelists', 'caching');
+	$cachingEnabled = \get_config('aspirelists', 'caching');
 
         if ($COURSE->idnumber)
 	{
 	    if($cachingEnabled) 
 	    {
-                $cache = cache::make('block_aspirelists', 'aspirelists');
+                $cache = \cache::make('block_aspirelists', 'aspirelists');
                 $lists = $cache->get(block_aspirelists::CACHEPREFIX . $COURSE->idnumber);
 
                 if(!$lists) {
@@ -51,7 +51,7 @@ class block_aspirelists extends block_base {
 
             foreach ($lists as $list)
             {
-                $itemNoun = ($list['count'] == 1) ? get_string("item", 'block_aspirelists') : get_string("items", 'block_aspirelists'); // get a friendly, human readable noun for the items
+                $itemNoun = ($list['count'] == 1) ? \get_string("item", 'block_aspirelists') : \get_string("items", 'block_aspirelists'); // get a friendly, human readable noun for the items
 
                 // finally, we're ready to output information to the browser
 
@@ -66,7 +66,7 @@ class block_aspirelists extends block_base {
                 $lastUpdatedHtml = '';
                 if (isset($list["lastUpdatedDate"]))
                 {
-                    $lastUpdatedHtml = html_writer::tag('span',', '.get_string('lastUpdated','block_aspirelists').' '.$this->contextualTime(strtotime($list["lastUpdatedDate"])) , array('class'=>'aspirelists-last-updated'));
+                    $lastUpdatedHtml = html_writer::tag('span',', '.\get_string('lastUpdated','block_aspirelists').' '.$this->contextualTime(strtotime($list["lastUpdatedDate"])) , array('class'=>'aspirelists-last-updated'));
                 }
 
                 // put it all together
@@ -76,7 +76,7 @@ class block_aspirelists extends block_base {
 
             if ($output=='')
             {
-                    $this->content->text = html_writer::tag('p', get_config('aspirelists', 'noResourceListsMessage'));
+                    $this->content->text = html_writer::tag('p', \get_config('aspirelists', 'noResourceListsMessage'));
             }
             else
             {
@@ -89,23 +89,23 @@ class block_aspirelists extends block_base {
 
     private function getTalisAspireList($codeGlobal)
     {
-        $site = get_config('aspirelists', 'targetAspire');
-        $httpsAlias = get_config('aspirelists', 'targetAspireAlias');
+        $site = \get_config('aspirelists', 'targetAspire');
+        $httpsAlias = \get_config('aspirelists', 'targetAspireAlias');
 
         if (empty($site))
         {
-            $this->content->text = get_string('no_base_url_configured', 'block_aspirelists');
+            $this->content->text = \get_string('no_base_url_configured', 'block_aspirelists');
             return $this->content;
         }
 
-        $targetKG = get_config('aspirelists', 'targetKG');
+        $targetKG = \get_config('aspirelists', 'targetKG');
         if (empty($targetKG))
         {
             $targetKG = "modules"; // default to modules
         }
 
-        $moduleCodeRegEx = '/'.get_config('aspirelists', 'moduleCodeRegex').'/';
-        $timePeriodRegEx = '/'.get_config('aspirelists', 'timePeriodRegex').'/';
+        $moduleCodeRegEx = '/'.\get_config('aspirelists', 'moduleCodeRegex').'/';
+        $timePeriodRegEx = '/'.\get_config('aspirelists', 'timePeriodRegex').'/';
 
         $urlModuleCode = '';
         $urlTimePeriod = '';
@@ -130,7 +130,7 @@ class block_aspirelists extends block_base {
             $results = array();
             if (preg_match($timePeriodRegEx, $codeGlobal, $results) == 1) // we have a match
             {
-                $mapping = json_decode(get_config('aspirelists', 'timePeriodMapping'),true);
+                $mapping = json_decode(\get_config('aspirelists', 'timePeriodMapping'),true);
                 if($mapping != null)
                 {
                     $urlTimePeriod = strtolower($mapping[$results[1]]); // make sure is lowercase for URL.
@@ -185,8 +185,8 @@ class block_aspirelists extends block_base {
                 foreach ($data["$site/$targetKG/$urlModuleCode"]['http://purl.org/vocab/resourcelist/schema#usesList'] as $usesList) // for each list this module uses...
                 {
                     $list = array();
-                    $list["url"] = clean_param($usesList["value"], PARAM_URL); // extract the list URL
-                    $list["name"] = clean_param($data[$list["url"]]['http://rdfs.org/sioc/spec/name'][0]['value'], PARAM_TEXT); // extract the list name
+                    $list["url"] = \clean_param($usesList["value"], PARAM_URL); // extract the list URL
+                    $list["name"] = \clean_param($data[$list["url"]]['http://rdfs.org/sioc/spec/name'][0]['value'], PARAM_TEXT); // extract the list name
 
                     // let's try and get a last updated date
                     if (isset($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#lastUpdated'])) // if there is a last updated date...
@@ -205,7 +205,7 @@ class block_aspirelists extends block_base {
                     {
                         foreach ($data[$list["url"]]['http://purl.org/vocab/resourcelist/schema#contains'] as $things) // loop through the list of things the list contains...
                         {
-                            if (preg_match('/\/items\//',clean_param($things['value'], PARAM_URL))) // if the thing is an item, increment the item count (lists can contain sections, too)
+                            if (preg_match('/\/items\//',\clean_param($things['value'], PARAM_URL))) // if the thing is an item, increment the item count (lists can contain sections, too)
                             {
                                 $itemCount++;
                             }

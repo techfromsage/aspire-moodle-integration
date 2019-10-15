@@ -5,7 +5,7 @@ namespace block_aspirelists\task;
 class expire_list_cache extends \core\task\scheduled_task {
 
   public function get_name() {
-    return get_string('expirelisttask', 'block_aspirelists');
+    return \get_string('expirelisttask', 'block_aspirelists');
   }
 
   public function execute() {

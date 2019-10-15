@@ -7,7 +7,7 @@ defined('MOODLE_INTERNAL' || die);
  * Provides a hook into the Moodle Event system for logging events.
  * This class implements the key functions needed to provide compatibility with https://docs.moodle.org/dev/Event_2
  * This class represents the event of a user launching an aspire list LTI link.
- * @package aspirelists\event
+ * @package mod_aspirelists\event
  */
 class aspire_lists_launch extends \core\event\base {
     /** @var  array */
@@ -20,7 +20,7 @@ class aspire_lists_launch extends \core\event\base {
     }
 
     public static function get_name() {
-        return get_string('eventAspireLaunch', 'aspirelists');
+        return \get_string('eventAspireLaunch', 'aspirelists');
     }
 
     public function get_description() {

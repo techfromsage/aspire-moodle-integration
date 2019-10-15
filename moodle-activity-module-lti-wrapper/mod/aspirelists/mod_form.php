@@ -21,7 +21,7 @@ else{
 class mod_aspirelists_mod_form extends mod_lti_mod_form {
      function definition() {
          global $CFG, $OUTPUT, $PAGE, $COURSE, $DB;
-         $pluginSettings = get_config('mod_aspirelists');
+         $pluginSettings = \get_config('mod_aspirelists');
 
          $launchUrl = $pluginSettings->targetAspire . ASPIRELISTS_LTI_LAUNCH_PATH;
          $ltiTool = lti_get_tool_by_url_match($launchUrl);
@@ -30,9 +30,9 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
          $ltiPluginId = $DB->get_field('modules', 'id', array('name'=>$ltiPlugin->name));
 
          $mform =& $this->_form;
-         $mform->addElement('header', 'general', get_string('generalheader', 'aspirelists'));
-         $mform->addElement('text', 'name', get_string('section_title', 'aspirelists'));
-         $mform->setDefault('name', get_string('default_section_title', 'aspirelists'));
+         $mform->addElement('header', 'general', \get_string('generalheader', 'aspirelists'));
+         $mform->addElement('text', 'name', \get_string('section_title', 'aspirelists'));
+         $mform->setDefault('name', \get_string('default_section_title', 'aspirelists'));
          $mform->addRule('name', null, 'required', null, 'client');
          $mform->setType('name', PARAM_TEXT);
 
@@ -52,10 +52,10 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
          }
          $mform->setAdvanced('showdescription');
          //-------------------------------------------------------
-         $mform->addElement('header', 'course_display', get_string('displayheader', 'aspirelists'));
-         $mform->addElement('select', 'display', get_string('display', 'aspirelists'),
-             array(ASPIRELISTS_DISPLAY_PAGE => get_string('displaypage', 'aspirelists'),
-                 ASPIRELISTS_DISPLAY_INLINE => get_string('displayinline', 'aspirelists')));
+         $mform->addElement('header', 'course_display', \get_string('displayheader', 'aspirelists'));
+         $mform->addElement('select', 'display', \get_string('display', 'aspirelists'),
+             array(ASPIRELISTS_DISPLAY_PAGE => \get_string('displaypage', 'aspirelists'),
+                 ASPIRELISTS_DISPLAY_INLINE => \get_string('displayinline', 'aspirelists')));
          $mform->addHelpButton('display', 'display', 'mod_aspirelists');
 
          if(method_exists($mform, 'setExpanded'))
@@ -64,12 +64,12 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
          }
 
          // Adding option to show sub-folders expanded or collapsed by default.
-         $mform->addElement('advcheckbox', 'showexpanded', get_string('showexpanded', 'aspirelists'));
+         $mform->addElement('advcheckbox', 'showexpanded', \get_string('showexpanded', 'aspirelists'));
          $mform->addHelpButton('showexpanded', 'showexpanded', 'mod_aspirelists');
          $mform->setDefault('showexpanded', 0);
 
          $this->standard_coursemodule_elements();
-         $this->add_action_buttons(true, get_string('save_and_continue', 'aspirelists'), false);
+         $this->add_action_buttons(true, \get_string('save_and_continue', 'aspirelists'), false);
 
      }
 
@@ -85,6 +85,6 @@ class mod_aspirelists_mod_form extends mod_lti_mod_form {
             return plugin_manager::instance();
         }
         // After moodle 2.6
-        return core_plugin_manager::instance();
+        return \core_plugin_manager::instance();
     }
 }

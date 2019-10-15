@@ -71,12 +71,12 @@ class mod_aspirelists_generator_testcase extends advanced_testcase {
         $this->assertEquals(1, $record->display);
         $this->assertEquals(1, $record->showexpanded);
 
-        $cm = get_coursemodule_from_instance('aspirelists', $list->id);
+        $cm = \get_coursemodule_from_instance('aspirelists', $list->id);
         $this->assertEquals($list->id, $cm->instance);
         $this->assertEquals('aspirelists', $cm->modname);
         $this->assertEquals($course->id, $cm->course);
 
-        $context = context_module::instance($cm->id);
+        $context = \context_module::instance($cm->id);
         $this->assertEquals($list->cmid, $context->instanceid);
 
     }

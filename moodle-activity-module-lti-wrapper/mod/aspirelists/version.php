@@ -7,12 +7,12 @@ if (!isset($plugin)) {
     $plugin = new stdClass();
 }
 
-$plugin->version   = 201910031000; // Version for this plugin - based on the date and then an increment number
-$plugin->requires  = 2012062507; // See http://docs.moodle.org/dev/Moodle_Versions
+$plugin->version   = 2019101500; // Version for this plugin - based on the date and then an increment number
+$plugin->requires  = 2018051700; // Lowest Moodle version required. See http://docs.moodle.org/dev/Moodle_Versions
 $plugin->cron      = 0;
 $plugin->component = 'mod_aspirelists';
-$plugin->maturity  = MATURITY_BETA;
-$plugin->release   = '.0001';
+$plugin->maturity  = MATURITY_STABLE;
+$plugin->release   = 'v0.15'; // Release name to be same as github code release tag
 
 if (isset($CFG->version))
 {

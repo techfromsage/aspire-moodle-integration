@@ -5,7 +5,7 @@ defined('MOODLE_INTERNAL' || die);
 /**
  * Class course_module_viewed
  * This provides an extension to the core course_module_viewed event to easily set legacy log data.
- * @package aspirelists\event
+ * @package mod_aspirelists\event
  */
 class course_module_viewed extends \core\event\course_module_viewed {
     /** @var  array */
