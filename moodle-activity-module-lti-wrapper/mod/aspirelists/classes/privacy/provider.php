@@ -57,6 +57,7 @@ class provider implements
     public static function get_contexts_for_userid(int $userid): contextlist
     {
         // This plugin does not directly handle user data in moodle
+        return new contextlist();
     }
 
     /**
