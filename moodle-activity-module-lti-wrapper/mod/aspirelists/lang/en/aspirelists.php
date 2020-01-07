@@ -83,6 +83,8 @@ $string['accordion_open'] = '&#9660;';
 $string['config_defaultInlineListHeight'] = 'Default height of an embedded list';
 $string['config_defaultInlineListHeight_desc'] = 'The default height of an inline embedded list in the course view';
 $string['config_defaultInlineListHeight_default'] = '400px' ;
+$string['config_maximiseFrameSize_visiblename'] = 'Maximise Frame Size' ;
+$string['config_maximiseFrameSize_description'] = 'Deprecated: This was required under older versions of moodle, but is now "off" by default as it causes display issues at higher text size or page zoom levels.  If switched on it will attempt to maximise the iframe using javascript.' ;
 
 $string['privacy:metadata:reason'] = 'The Aspire Lists LTI Wrapper does not store any user data in Moodle, but some user data is passed via LTI.';
 $string['privacy:metadata:lti_client'] = 'In order to integrate with a remote Talis Aspire LTI Tool Provider, user data needs to be exchanged with Talis Aspire. No user data is stored in Moodle by this plugin';

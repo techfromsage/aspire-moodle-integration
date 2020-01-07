@@ -23,3 +23,12 @@
     $settings->add(new \admin_setting_configtext('mod_aspirelists/timePeriodMapping',\get_string('config_timePeriodMapping', 'mod_aspirelists'), \get_string('config_timePeriodMapping_desc', 'mod_aspirelists'), \get_string('config_timePeriodMapping_ex', 'mod_aspirelists') ));
 
     $settings->add(new \admin_setting_configtext('mod_aspirelists/defaultInlineListHeight',\get_string('config_defaultInlineListHeight', 'mod_aspirelists'), \get_string('config_defaultInlineListHeight_desc', 'mod_aspirelists'), \get_string('config_defaultInlineListHeight_default', 'mod_aspirelists') ));
+
+    $settings->add(new \admin_setting_configcheckbox(
+        'mod_aspirelists/maximiseFrameSize',
+        \get_string('config_maximiseFrameSize_visiblename', 'mod_aspirelists'),
+        \get_string('config_maximiseFrameSize_description', 'mod_aspirelists'),
+        '0', // Default value
+        '1', // Checked value
+        '0'  // Unchecked value
+    ));
