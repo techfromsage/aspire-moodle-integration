@@ -126,7 +126,7 @@ if ( $launchcontainer == LTI_LAUNCH_CONTAINER_WINDOW ) {
     // Request the launch content with an iframe tag instead of the standard moodle LTI object tag
     echo '<iframe id="contentframe" height="600px" width="100%" type="text/html" src="launch.php?id='.$cm->id.'" frameborder="0"></iframe>';
 
-    //Output script to make the object tag be as large as possible
+    // Prep script to make the object tag be as large as possible
     $resize = '
         <script type="text/javascript">
         //<![CDATA[
@@ -160,7 +160,11 @@ if ( $launchcontainer == LTI_LAUNCH_CONTAINER_WINDOW ) {
         </script>
 ';
 
-    echo $resize;
+    $pluginSettings = \get_config('mod_aspirelists');
+    // Apply resize script if plugin setting is checked
+    if(!empty($pluginSettings->maximiseFrameSize)) {
+        echo $resize;
+    }
 }
 
 // Finish the page
