@@ -4,7 +4,7 @@ require_once("../../config.php");
 require_once($CFG->dirroot.'/mod/aspirelists/lib.php');
 require_once($CFG->dirroot.'/mod/lti/lib.php');
 require_once($CFG->dirroot.'/mod/lti/locallib.php');
-require_once($CFG->dirroot.'/mod/aspirelists/classes/event/aspirelists_launch.php');
+require_once($CFG->dirroot.'/mod/aspirelists/classes/event/aspire_lists_launch.php');
 
 // make sure that this launch.php page is not cached by any proxies.
 header("Cache-Control: no-cache, must-revalidate");
