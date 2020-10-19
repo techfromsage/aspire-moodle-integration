@@ -68,7 +68,8 @@ The block needs to be configured to point to your Talis Aspire tenancy
 ## Making it live
 
 8. Now add the block to all courses
-  8. follow the instructions in this [knowledgebase article](http://support.talisaspire.com/entries/22420746-Making-a-Moodle-2-Block-appear-on-all-Courses)
+  8. Follow the instructions in this [Moodle Documentation](https://docs.moodle.org/39/en/Block_settings)
+  8. Sticky blocks are a moodle feature and not something we have any direct control over.
 9. Or you might want to only add to a selected course:
   9. From the Blocks drop down on the right hand column, choose "Resource Lists". 
   9. The resource lists block will be placed on the page. Optionally, you can now position the block using the icons under the block title to move it about.
