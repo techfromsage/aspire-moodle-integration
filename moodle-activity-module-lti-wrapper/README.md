@@ -4,6 +4,14 @@ Talis Aspire Reading Lists Moodle Integration
 Compatibility
 -------------
 
+## Moodle 3.11 to 4.x
+
+You are recommended to use Talis' LTI 1.3 intergration with Moodle 3.11 upwards. [Documentation is available on our support knowledge base](https://support.talis.com/hc/en-us/articles/5519648821149-Talis-Aspire-LTI-1-3-Moodle-Set-Up-Instructions)
+
+This plugin ONLY works with LTI 1.1 and is not going to be updated to use LTI 1.3
+
+## Moodle 3.x to 3.11
+
 The activity module has been tested with all current versions of Moodle. [See the full matrix of versions tested](https://travis-ci.org/talis/aspire-moodle-integration).
 If you do become aware of any issues affecting the plugin, then feel free to raise them with Talis directly, or by adding issues to the github repository here.  
 
