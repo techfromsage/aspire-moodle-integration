@@ -10,6 +10,7 @@ There are individual README files for each plugin which contain installation and
 
 Talis have not tested these plugins with Moodle 4.  We recommend using LTI 1.3 for all new integrations of Talis Aspire with Moodle, and suggest that people migrate to using LTI 1.3 instead of this plugin for all other existing installations.
 
+The `mod_aspirelists` plugin ONLY works with LTI 1.1. It will not be updated to work with LTI 1.3
 You can find our [documentation for Moodle and LTI 1.3 in the support knowledge base](https://support.talis.com/hc/en-us/articles/5519648821149-Talis-Aspire-LTI-1-3-Moodle-Set-Up-Instructions)
 
 ## Moodle 3.x mod_aspirelists
